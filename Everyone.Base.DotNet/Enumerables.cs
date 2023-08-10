@@ -6,7 +6,7 @@ using System.Text;
 
 namespace everyone
 {
-    public static class Enumerables
+    public static partial class Enumerables
     {
         public static bool SequenceEqual(this IEnumerable? lhs, IEnumerable? rhs)
         {
@@ -79,16 +79,6 @@ namespace everyone
         public static bool ContainsAll<T>(this IEnumerable<T> values, IEnumerable<T> toCheck)
         {
             return !toCheck.Any(value => !values.Contains(value));
-        }
-
-        public static Iterator<T> Iterate<T>(this IEnumerable<T> values)
-        {
-            if (values == null)
-            {
-                throw new ArgumentNullException(nameof(values));
-            }
-
-            return Iterator.Create(values.GetEnumerator());
         }
     }
 }

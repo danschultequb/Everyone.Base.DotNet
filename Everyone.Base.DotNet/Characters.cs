@@ -5,7 +5,7 @@ namespace everyone
     /// <summary>
     /// A collection of methods for extending the built in <see cref="char"/> type.
     /// </summary>
-    public static class Characters
+    public static partial class Characters
     {
         private const string defaultQuote = "'";
 

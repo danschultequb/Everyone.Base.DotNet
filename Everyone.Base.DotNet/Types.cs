@@ -2,7 +2,7 @@
 
 namespace everyone
 {
-    public static class Types
+    public static partial class Types
     {
         public static Type GetType<T>()
         {

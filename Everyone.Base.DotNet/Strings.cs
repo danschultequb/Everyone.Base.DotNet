@@ -5,7 +5,7 @@ namespace everyone
     /// <summary>
     /// A collection of methods for extending the built in <see cref="string"/> type.
     /// </summary>
-    public static class Strings
+    public static partial class Strings
     {
         private const string defaultQuote = "\"";
 
