@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using Microsoft.VisualBasic;
 
-namespace everyone
+namespace Everyone
 {
     public class BasicToStringFunctions : MutableToStringFunctions
     {

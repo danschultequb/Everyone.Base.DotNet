@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace everyone
+namespace Everyone
 {
     /// <summary>
     /// An <see cref="Event"/> that can have its subscribed <see cref="Action"/>s invoked.

@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualBasic;
 
-namespace everyone
+namespace Everyone
 {
     /// <summary>
     /// A collection of methods for extending the built in <see cref="char"/> type.

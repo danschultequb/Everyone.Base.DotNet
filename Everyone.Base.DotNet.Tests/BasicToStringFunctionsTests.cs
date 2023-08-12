@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Runtime.CompilerServices;
 
-namespace everyone
+namespace Everyone
 {
     public static class BasicToStringFunctionsTests
     {

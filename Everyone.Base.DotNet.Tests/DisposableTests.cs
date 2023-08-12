@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace everyone
+namespace Everyone
 {
     public static class DisposableTests
     {

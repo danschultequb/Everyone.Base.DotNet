@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace everyone
+namespace Everyone
 {
     public static class StringBuilders
     {

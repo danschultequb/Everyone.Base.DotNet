@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace everyone
+namespace Everyone
 {
     public static class BasicRunnableEventTests
     {
@@ -54,7 +54,7 @@ namespace everyone
                 });
             });
 
-            runner.TestGroup("everyone.BasicRunnableEvent<T1>", () =>
+            runner.TestGroup("BasicRunnableEvent<T1>", () =>
             {
                 runner.Test("Constructor()", (Test test) =>
                 {
@@ -102,7 +102,7 @@ namespace everyone
                 });
             });
 
-            runner.TestGroup("everyone.BasicRunnableEvent<T1,T2>", () =>
+            runner.TestGroup("BasicRunnableEvent<T1,T2>", () =>
             {
                 runner.Test("Constructor()", (Test test) =>
                 {

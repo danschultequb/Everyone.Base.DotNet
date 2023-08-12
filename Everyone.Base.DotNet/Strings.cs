@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace everyone
+namespace Everyone
 {
     /// <summary>
     /// A collection of methods for extending the built in <see cref="string"/> type.

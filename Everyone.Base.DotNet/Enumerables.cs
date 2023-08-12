@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace everyone
+namespace Everyone
 {
     public static partial class Enumerables
     {
@@ -79,6 +79,23 @@ namespace everyone
         public static bool ContainsAll<T>(this IEnumerable<T> values, IEnumerable<T> toCheck)
         {
             return !toCheck.Any(value => !values.Contains(value));
+        }
+
+        /// <summary>
+        /// Get an <see cref="IEnumerable"/> where each value is the result of applying the
+        /// provided <paramref name="mapFunction"/> to a value in this <see cref="IEnumerable"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the values in the original <see cref="IEnumerable"/>.</typeparam>
+        /// <typeparam name="U">The type of values in the returned <see cref="IEnumerable"/>.</typeparam>
+        /// <param name="values">The values to map from.</param>
+        /// <param name="mapFunction">The <see cref="Func"/> that will perform the transformation
+        /// transformation from <typeparamref name="T"/> to <typeparamref name="U"/>.</param>
+        public static IEnumerable<U> Map<T,U>(this IEnumerable<T> values, Func<T,U> mapFunction)
+        {
+            PreCondition.AssertNotNull(values, nameof(values));
+            PreCondition.AssertNotNull(mapFunction, nameof(mapFunction));
+
+            return values.Select(mapFunction);
         }
     }
 }

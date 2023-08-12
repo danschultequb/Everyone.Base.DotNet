@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace everyone
+namespace Everyone
 {
     /// <summary>
     /// A collection of functions that can be used to convert objects of different types to their

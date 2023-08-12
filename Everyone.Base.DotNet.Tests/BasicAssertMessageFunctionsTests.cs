@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace everyone
+namespace Everyone
 {
     public static class BasicAssertMessageFunctionsTests
     {
@@ -9,6 +9,202 @@ namespace everyone
         {
             runner.TestGroup(typeof(BasicAssertMessageFunctions), () =>
             {
+                runner.TestGroup("ExpectedTrue(bool?,AssertMessageParameters?", () =>
+                {
+                    void ExpectedTrueTest(bool? value, AssertParameters? parameters, string expected)
+                    {
+                        runner.Test($"with {Language.AndList(new object?[] { value, parameters }.Select(runner.ToString))}", (Test test) =>
+                        {
+                            BasicAssertMessageFunctions functions = BasicAssertMessageFunctions.Create();
+                            test.AssertEqual(expected, functions.ExpectedTrue(value, parameters));
+                        });
+                    }
+
+                    ExpectedTrueTest(
+                        value: null,
+                        parameters: null,
+                        expected: string.Join(Environment.NewLine,
+                            "Expected: True",
+                            "Actual:   null"));
+                    ExpectedTrueTest(
+                        value: true,
+                        parameters: null,
+                        expected: string.Join(Environment.NewLine,
+                            "Expected: True",
+                            "Actual:   True"));
+                    ExpectedTrueTest(
+                        value: false,
+                        parameters: null,
+                        expected: string.Join(Environment.NewLine,
+                            "Expected: True",
+                            "Actual:   False"));
+                    ExpectedTrueTest(
+                        value: false,
+                        parameters: new AssertParameters {},
+                        expected: string.Join(Environment.NewLine,
+                            "Expected: True",
+                            "Actual:   False"));
+                    ExpectedTrueTest(
+                        value: false,
+                        parameters: new AssertParameters { Message = "Hello!" },
+                        expected: string.Join(Environment.NewLine,
+                            "Message: Hello!",
+                            "Expected: True",
+                            "Actual:   False"));
+                    ExpectedTrueTest(
+                        value: false,
+                        parameters: new AssertParameters { Expression = "a.Value" },
+                        expected: string.Join(Environment.NewLine,
+                            "Expression: a.Value",
+                            "Expected: True",
+                            "Actual:   False"));
+                    ExpectedTrueTest(
+                        value: false,
+                        parameters: new AssertParameters { Message = "Hello!", Expression = "a.Value" },
+                        expected: string.Join(Environment.NewLine,
+                            "Message: Hello!",
+                            "Expression: a.Value",
+                            "Expected: True",
+                            "Actual:   False"));
+                    ExpectedTrueTest(
+                        value: false,
+                        parameters: new AssertParameters { NewLine = "\n" },
+                        expected: string.Join("\n",
+                            "Expected: True",
+                            "Actual:   False"));
+                });
+
+                runner.TestGroup("ExpectedFalse(bool?,AssertMessageParameters?", () =>
+                {
+                    void ExpectedFalseTest(bool? value, AssertParameters? parameters, string expected)
+                    {
+                        runner.Test($"with {Language.AndList(new object?[] { value, parameters }.Select(runner.ToString))}", (Test test) =>
+                        {
+                            BasicAssertMessageFunctions functions = BasicAssertMessageFunctions.Create();
+                            test.AssertEqual(expected, functions.ExpectedFalse(value, parameters));
+                        });
+                    }
+
+                    ExpectedFalseTest(
+                        value: null,
+                        parameters: null,
+                        expected: string.Join(Environment.NewLine,
+                            "Expected: False",
+                            "Actual:   null"));
+                    ExpectedFalseTest(
+                        value: true,
+                        parameters: null,
+                        expected: string.Join(Environment.NewLine,
+                            "Expected: False",
+                            "Actual:   True"));
+                    ExpectedFalseTest(
+                        value: false,
+                        parameters: null,
+                        expected: string.Join(Environment.NewLine,
+                            "Expected: False",
+                            "Actual:   False"));
+                    ExpectedFalseTest(
+                        value: false,
+                        parameters: new AssertParameters { },
+                        expected: string.Join(Environment.NewLine,
+                            "Expected: False",
+                            "Actual:   False"));
+                    ExpectedFalseTest(
+                        value: false,
+                        parameters: new AssertParameters { Message = "Hello!" },
+                        expected: string.Join(Environment.NewLine,
+                            "Message: Hello!",
+                            "Expected: False",
+                            "Actual:   False"));
+                    ExpectedFalseTest(
+                        value: false,
+                        parameters: new AssertParameters { Expression = "a.Value" },
+                        expected: string.Join(Environment.NewLine,
+                            "Expression: a.Value",
+                            "Expected: False",
+                            "Actual:   False"));
+                    ExpectedFalseTest(
+                        value: false,
+                        parameters: new AssertParameters { Message = "Hello!", Expression = "a.Value" },
+                        expected: string.Join(Environment.NewLine,
+                            "Message: Hello!",
+                            "Expression: a.Value",
+                            "Expected: False",
+                            "Actual:   False"));
+                    ExpectedFalseTest(
+                        value: false,
+                        parameters: new AssertParameters { NewLine = "\n" },
+                        expected: string.Join("\n",
+                            "Expected: False",
+                            "Actual:   False"));
+                });
+
+                runner.TestGroup("ExpectedNull(object?,AssertMessageParameters?", () =>
+                {
+                    void ExpectedFalseTest(object? value, AssertParameters? parameters, string expected)
+                    {
+                        runner.Test($"with {Language.AndList(new object?[] { value, parameters }.Select(runner.ToString))}", (Test test) =>
+                        {
+                            BasicAssertMessageFunctions functions = BasicAssertMessageFunctions.Create();
+                            test.AssertEqual(expected, functions.ExpectedNull(value, parameters));
+                        });
+                    }
+
+                    ExpectedFalseTest(
+                        value: null,
+                        parameters: null,
+                        expected: string.Join(Environment.NewLine,
+                            "Expected: null",
+                            "Actual:   null"));
+                    ExpectedFalseTest(
+                        value: true,
+                        parameters: null,
+                        expected: string.Join(Environment.NewLine,
+                            "Expected: null",
+                            "Actual:   True"));
+                    ExpectedFalseTest(
+                        value: false,
+                        parameters: null,
+                        expected: string.Join(Environment.NewLine,
+                            "Expected: null",
+                            "Actual:   False"));
+                    ExpectedFalseTest(
+                        value: false,
+                        parameters: new AssertParameters { },
+                        expected: string.Join(Environment.NewLine,
+                            "Expected: null",
+                            "Actual:   False"));
+                    ExpectedFalseTest(
+                        value: false,
+                        parameters: new AssertParameters { Message = "Hello!" },
+                        expected: string.Join(Environment.NewLine,
+                            "Message: Hello!",
+                            "Expected: null",
+                            "Actual:   False"));
+                    ExpectedFalseTest(
+                        value: false,
+                        parameters: new AssertParameters { Expression = "a.Value" },
+                        expected: string.Join(Environment.NewLine,
+                            "Expression: a.Value",
+                            "Expected: null",
+                            "Actual:   False"));
+                    ExpectedFalseTest(
+                        value: false,
+                        parameters: new AssertParameters { Message = "Hello!", Expression = "a.Value" },
+                        expected: string.Join(Environment.NewLine,
+                            "Message: Hello!",
+                            "Expression: a.Value",
+                            "Expected: null",
+                            "Actual:   False"));
+                    ExpectedFalseTest(
+                        value: false,
+                        parameters: new AssertParameters { NewLine = "\n" },
+                        expected: string.Join("\n",
+                            "Expected: null",
+                            "Actual:   False"));
+                });
+
+
                 runner.TestGroup("ExpectedSame(T?,U?,string?,string?)", () =>
                 {
                     void ExpectedSameTest<T,U>(T? expected, U? actual, string? message = null, string? newLine = null, string expectedText = "")

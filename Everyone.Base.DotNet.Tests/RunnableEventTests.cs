@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace everyone
+namespace Everyone
 {
     public static class RunnableEventTests
     {
@@ -84,7 +84,7 @@ namespace everyone
 
         public static void Test(TestRunner runner, Func<RunnableEvent<int>> creator)
         {
-            runner.TestGroup("everyone.RunnableEvent<T1>", () =>
+            runner.TestGroup("RunnableEvent<T1>", () =>
             {
                 EventTests.Test(runner, creator);
 
@@ -133,7 +133,7 @@ namespace everyone
 
         public static void Test(TestRunner runner, Func<RunnableEvent<int,bool>> creator)
         {
-            runner.TestGroup("everyone.RunnableEvent<T1,T2>", () =>
+            runner.TestGroup("RunnableEvent<T1,T2>", () =>
             {
                 EventTests.Test(runner, creator);
 

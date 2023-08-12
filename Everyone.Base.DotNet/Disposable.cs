@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace everyone
+namespace Everyone
 {
     /// <summary>
     /// An <see cref="IDisposable"/> that keeps track of whether it's been disposed.

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace everyone
+namespace Everyone
 {
     public static partial class Types
     {
@@ -21,7 +21,19 @@ namespace everyone
             return value?.GetType() ?? Types.GetType<T>();
         }
 
-        public static string GetTypeFullName(Type type)
+        [Obsolete]
+        public static string GetTypeFullName<T>()
+        {
+            return Types.GetFullName(Types.GetType<T>());
+        }
+
+        public static string GetFullName<T>()
+        {
+            return Types.GetFullName(Types.GetType<T>());
+        }
+
+        [Obsolete]
+        public static string GetTypeFullName(this Type type)
         {
             if (type == null)
             {
@@ -30,14 +42,58 @@ namespace everyone
             return type.FullName ?? type.Name;
         }
 
-        public static string GetTypeFullName<T>()
+        public static string GetFullName(this Type type)
         {
-            return Types.GetTypeFullName(Types.GetType<T>());
+            if (type == null)
+            {
+                throw new ArgumentNullException(nameof(type));
+            }
+
+            return type.FullName ?? type.Name;
         }
 
+        [Obsolete]
         public static string GetTypeFullName<T>(T? value)
         {
-            return Types.GetTypeFullName(Types.GetType<T>(value));
+            return Types.GetFullName(Types.GetType<T>(value));
+        }
+
+        public static string GetFullName<T>(T? value)
+        {
+            return Types.GetFullName(Types.GetType<T>(value));
+        }
+
+        /// <summary>
+        /// Get whether this <paramref name="value"/> is an instance of the provided
+        /// <paramref name="baseType"/>.
+        /// </summary>
+        /// <typeparam name="T">The <see cref="Type"/> of the this <paramref name="value"/>.</typeparam>
+        /// <param name="value">The value to check.</param>
+        /// <param name="baseType">The base <see cref="Type"/> to look for.</param>
+        public static bool InstanceOf<T>(this T? value, Type baseType)
+        {
+            Type valueType = Types.GetType<T>(value);
+            return Types.InstanceOf(valueType, baseType);
+        }
+
+        /// <summary>
+        /// Get whether this <see cref="Type"/> is an instance of the provided
+        /// <paramref name="baseType"/>.
+        /// </summary>
+        /// <param name="valueType">The <see cref="Type"/> to check.</param>
+        /// <param name="baseType">The base <see cref="Type"/> to look for.</param>
+        public static bool InstanceOf(this Type valueType, Type baseType)
+        {
+            if (valueType == null)
+            {
+                throw new ArgumentNullException(nameof(valueType));
+            }
+            if (baseType == null)
+            {
+                throw new ArgumentNullException(nameof(baseType));
+            }
+
+            return baseType.IsAssignableFrom(valueType);
         }
     }
 }

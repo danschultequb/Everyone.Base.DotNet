@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Text;
 
-namespace everyone
+namespace Everyone
 {
     public static class StringBuildersTests
     {

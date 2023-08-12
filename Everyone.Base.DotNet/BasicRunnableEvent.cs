@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace everyone
+namespace Everyone
 {
     public class BasicRunnableEvent : RunnableEvent
     {

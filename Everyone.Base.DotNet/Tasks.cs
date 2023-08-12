@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace everyone
+namespace Everyone
 {
     public static partial class Tasks
     {

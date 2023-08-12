@@ -1,4 +1,4 @@
-﻿namespace everyone
+﻿namespace Everyone
 {
     public class HashCode
     {

@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.CompilerServices;
 
-namespace everyone
+namespace Everyone
 {
     /// <summary>
     /// A basic implementation of the <see cref="CompareFunctions"/> interface.
@@ -13,21 +12,28 @@ namespace everyone
     {
         private readonly IDictionary<Tuple<Type, Type>, Func<object?, object?, bool>> equalFunctionMap;
 
-        private BasicCompareFunctions(bool addDefaultFunctions)
+        private readonly IDictionary<Tuple<Type, Type>, Func<object?, object?, Comparison>> compareFunctionMap;
+        private readonly bool addDefaultCompareFunctions;
+
+        private BasicCompareFunctions(bool addDefaultEqualFunctions, bool addDefaultCompareFunctions)
         {
             this.equalFunctionMap = new Dictionary<Tuple<Type, Type>, Func<object?, object?, bool>>();
-
-            if (addDefaultFunctions)
+            if (addDefaultEqualFunctions)
             {
                 this.AddEqualFunction<IEnumerable, IEnumerable>(this.EnumerablesEqual);
                 this.AddEqualFunction<ITuple, ITuple>(this.TupleEqual);
                 this.AddEqualFunction<Exception, Exception>(this.ExceptionEqual);
             }
+
+            this.compareFunctionMap = new Dictionary<Tuple<Type, Type>, Func<object?, object?, Comparison>>();
+            this.addDefaultCompareFunctions = addDefaultCompareFunctions;
         }
 
-        public static BasicCompareFunctions Create(bool addDefaultFunctions = true)
+        public static BasicCompareFunctions Create(bool addDefaultEqualFunctions = true, bool addDefaultCompareFunctions = true)
         {
-            return new BasicCompareFunctions(addDefaultFunctions);
+            return new BasicCompareFunctions(
+                addDefaultEqualFunctions: addDefaultEqualFunctions,
+                addDefaultCompareFunctions: addDefaultCompareFunctions);
         }
 
         public bool EnumerablesEqual(IEnumerable? lhs, IEnumerable? rhs)
@@ -64,18 +70,21 @@ namespace everyone
         {
             Func<object?, object?, bool>? result = null;
 
-            Type tType = lhs?.GetType() ?? typeof(T);
-            Type uType = rhs?.GetType() ?? typeof(U);
-            if (!this.equalFunctionMap.TryGetValue(Tuple.Create(tType, uType), out result) || result == null)
+            Type lhsType = Types.GetType(lhs);
+            Type rhsType = Types.GetType(rhs);
+            if (!this.equalFunctionMap.TryGetValue(Tuple.Create(lhsType, rhsType), out result) || result == null)
             {
                 foreach (KeyValuePair<Tuple<Type, Type>, Func<object?, object?, bool>> entry in this.equalFunctionMap)
                 {
-                    bool lhsMatches = entry.Key.Item1.IsInstanceOfType(lhs);
-                    bool rhsMatches = entry.Key.Item2.IsInstanceOfType(rhs);
-                    if (lhsMatches && rhsMatches)
+                    bool lhsMatches = lhsType.InstanceOf(entry.Key.Item1);
+                    if (lhsMatches)
                     {
-                        result = entry.Value;
-                        break;
+                        bool rhsMatches = rhsType.InstanceOf(entry.Key.Item2);
+                        if (rhsMatches)
+                        {
+                            result = entry.Value;
+                            break;
+                        }
                     }
                 }
 
@@ -118,6 +127,66 @@ namespace everyone
                 result = equalFunction.Invoke(lhs, rhs);
             }
             return result;
+        }
+
+        private Func<T?, U?, Comparison> GetCompareFunction<T, U>(T? lhs, U? rhs)
+        {
+            Func<object?, object?, Comparison>? result = null;
+
+            Type tType = lhs?.GetType() ?? typeof(T);
+            Type uType = rhs?.GetType() ?? typeof(U);
+            if (!this.compareFunctionMap.TryGetValue(Tuple.Create(tType, uType), out result) || result == null)
+            {
+                foreach (KeyValuePair<Tuple<Type, Type>, Func<object?, object?, Comparison>> entry in this.compareFunctionMap)
+                {
+                    bool lhsMatches = entry.Key.Item1.InstanceOf(tType);
+                    bool rhsMatches = entry.Key.Item2.InstanceOf(uType);
+                    if (lhsMatches && rhsMatches)
+                    {
+                        result = entry.Value;
+                        break;
+                    }
+                }
+
+                if (this.addDefaultCompareFunctions && lhs is IComparable<U> lhsComparable)
+                {
+                    result = (object? objectLhs, object? objectRhs) => Comparisons.Create(((IComparable<U>)objectLhs!).CompareTo((U?)objectRhs));
+                }
+
+                if (result == null)
+                {
+                    throw new InvalidOperationException($"No compare function found that matches the types {Language.AndList(new[] { tType, uType }.Map(Types.GetFullName))}");
+                }
+            }
+
+            return (T? compareLhs, U? compareRhs) => result.Invoke(compareLhs, compareRhs);
+        }
+
+        public Disposable AddCompareFunction<T, U>(Func<T?, U?, Comparison> compareFunction)
+        {
+            if (compareFunction == null)
+            {
+                throw new ArgumentNullException(nameof(compareFunction));
+            }
+
+            Tuple<Type, Type> compareFunctionKey = Tuple.Create(typeof(T), typeof(U));
+            this.compareFunctionMap.Remove(compareFunctionKey, out Func<object?, object?, Comparison>? previousEqualFunction);
+            this.compareFunctionMap.Add(compareFunctionKey, (object? lhs, object? rhs) => compareFunction.Invoke((T?)lhs, (U?)rhs));
+
+            return Disposable.Create(() =>
+            {
+                this.compareFunctionMap.Remove(compareFunctionKey);
+                if (previousEqualFunction != null)
+                {
+                    this.compareFunctionMap.Add(compareFunctionKey, previousEqualFunction);
+                }
+            });
+        }
+
+        public Comparison Compare<T, U>(T? lhs, U? rhs)
+        {
+            Func<T?, U?, Comparison> compareFunction = this.GetCompareFunction(lhs, rhs);
+            return compareFunction.Invoke(lhs, rhs);
         }
     }
 }

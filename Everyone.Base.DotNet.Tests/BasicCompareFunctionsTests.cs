@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.CompilerServices;
 
-namespace everyone
+namespace Everyone
 {
     public static class BasicCompareFunctionsTests
     {

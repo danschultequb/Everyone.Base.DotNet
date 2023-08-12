@@ -1,4 +1,4 @@
-﻿namespace everyone
+﻿namespace Everyone
 {
     internal static class StringsTests
     {

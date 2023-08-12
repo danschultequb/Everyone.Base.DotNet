@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace everyone
+namespace Everyone
 {
     /// <summary>
     /// An <see cref="Exception"/> that is thrown when a pre-condition fails.
