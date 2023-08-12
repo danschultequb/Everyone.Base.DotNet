@@ -2,23 +2,23 @@
 {
     public static class PreCondition
     {
-        private static AssertMessageFunctions messageFunctions = AssertMessageFunctions.Create();
-        public static AssertMessageFunctions MessageFunctions
+        private static AssertMessageFunctions? messageFunctions = null;
+        public static AssertMessageFunctions AssertMessageFunctions
         {
-            get { return PreCondition.messageFunctions; }
+            get { return PreCondition.messageFunctions ?? Conditions.AssertMessageFunctions; }
             set { PreCondition.messageFunctions = value; }
         }
 
-        private static CompareFunctions compareFunctions = CompareFunctions.Create();
+        private static CompareFunctions? compareFunctions = null;
         public static CompareFunctions CompareFunctions
         {
-            get { return PreCondition.compareFunctions; }
+            get { return PreCondition.compareFunctions ?? Conditions.CompareFunctions; }
             set { PreCondition.compareFunctions = value; }
         }
 
         private static AssertMessageFunctions GetAssertMessageFunctions(AssertParameters? parameters)
         {
-            return parameters?.AssertMessageFunctions ?? PreCondition.MessageFunctions;
+            return parameters?.AssertMessageFunctions ?? PreCondition.AssertMessageFunctions;
         }
 
         private static CompareFunctions GetCompareFunctions(AssertParameters? parameters)
@@ -87,20 +87,34 @@
         {
             if (!PreCondition.GetCompareFunctions(parameters).IsNotNullAndNotEmpty(value))
             {
-                throw new PreConditionFailure(PreCondition.GetAssertMessageFunctions(parameters).ExpectedNotNullAndNotEmpty(value: value, parameters));
+                throw new PreConditionFailure(
+                    PreCondition.GetAssertMessageFunctions(parameters)
+                                .ExpectedNotNullAndNotEmpty(
+                                    value: value,
+                                    parameters: parameters));
             }
         }
 
         public static void AssertBetween<T, U, V>(T? lowerBound, U? value, V? upperBound, string? expression = null)
         {
-            PreCondition.AssertBetween(lowerBound, value, new AssertParameters { Expression = expression });
+            PreCondition.AssertBetween(
+                lowerBound: lowerBound,
+                value: value,
+                upperBound: upperBound,
+                parameters: new AssertParameters { Expression = expression });
         }
 
         public static void AssertBetween<T, U, V>(T? lowerBound, U? value, V? upperBound, AssertParameters? parameters)
         {
             if (!PreCondition.GetCompareFunctions(parameters).IsBetween(lowerBound, value, upperBound))
             {
-                throw new PreConditionFailure(PreCondition.GetAssertMessageFunctions(parameters).ExpectedBetween(lowerBound, value, upperBound, parameters));
+                throw new PreConditionFailure(
+                    PreCondition.GetAssertMessageFunctions(parameters)
+                                .ExpectedBetween(
+                                    lowerBound: lowerBound,
+                                    value: value,
+                                    upperBound: upperBound,
+                                    parameters: parameters));
             }
         }
     }

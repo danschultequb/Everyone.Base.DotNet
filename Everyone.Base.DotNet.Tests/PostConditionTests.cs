@@ -296,6 +296,128 @@ namespace Everyone
                         value: "a",
                         expression: "abc");
                 });
+
+                runner.TestGroup("AssertBetween<T,U,V>(T?,U?,V?,string?)", () =>
+                {
+                    void AssertBetweenTest<T, U, V>(T? lowerBound, U? value, V? upperBound, string? expression = null, Exception? expectedException = null)
+                    {
+                        runner.Test($"with {Language.AndList(new object?[] { lowerBound, value, upperBound, expression }.Map(runner.ToString))}", (Test test) =>
+                        {
+                            if (expectedException == null)
+                            {
+                                PostCondition.AssertBetween(
+                                    lowerBound: lowerBound,
+                                    value: value,
+                                    upperBound: upperBound,
+                                    expression: expression);
+                            }
+                            else
+                            {
+                                test.AssertThrows(expectedException, () =>
+                                {
+                                    PostCondition.AssertBetween(
+                                        lowerBound: lowerBound,
+                                        value: value,
+                                        upperBound: upperBound,
+                                        expression: expression);
+                                });
+                            }
+                        });
+                    }
+
+                    AssertBetweenTest(
+                        lowerBound: 1,
+                        value: 2,
+                        upperBound: 3);
+                    AssertBetweenTest(
+                        lowerBound: 1,
+                        value: 2,
+                        upperBound: 3,
+                        expression: "hello");
+                    AssertBetweenTest(
+                        lowerBound: 1,
+                        value: 0,
+                        upperBound: 3,
+                        expectedException: new PostConditionFailure(
+                            "Expected: between 1 and 3",
+                            "Actual:           0"));
+                    AssertBetweenTest(
+                        lowerBound: 1,
+                        value: 0,
+                        upperBound: 3,
+                        expression: "hello",
+                        expectedException: new PostConditionFailure(
+                            "Expression: hello",
+                            "Expected: between 1 and 3",
+                            "Actual:           0"));
+
+                    AssertBetweenTest(
+                        lowerBound: '1',
+                        value: '2',
+                        upperBound: '3');
+                    AssertBetweenTest(
+                        lowerBound: '1',
+                        value: '2',
+                        upperBound: '3',
+                        expression: "hello");
+                    AssertBetweenTest(
+                        lowerBound: '1',
+                        value: '0',
+                        upperBound: '3',
+                        expectedException: new PostConditionFailure(
+                            "Expected: between '1' and '3'",
+                            "Actual:           '0'"));
+                    AssertBetweenTest(
+                        lowerBound: '1',
+                        value: '0',
+                        upperBound: '3',
+                        expression: "hello",
+                        expectedException: new PostConditionFailure(
+                            "Expression: hello",
+                            "Expected: between '1' and '3'",
+                            "Actual:           '0'"));
+
+                    AssertBetweenTest(
+                        lowerBound: "no compare function",
+                        value: false,
+                        upperBound: 40,
+                        expectedException: new InvalidOperationException("No compare function found that matches the types System.String and System.Boolean."));
+                    AssertBetweenTest(
+                        lowerBound: "no compare function",
+                        value: false,
+                        upperBound: 40,
+                        expression: "hello",
+                        expectedException: new InvalidOperationException("No compare function found that matches the types System.String and System.Boolean."));
+
+                    AssertBetweenTest(
+                        lowerBound: "no compare",
+                        value: "function",
+                        upperBound: 40,
+                        expectedException: new PostConditionFailure(
+                            "Expected: between \"no compare\" and 40",
+                            "Actual:           \"function\""));
+                    AssertBetweenTest(
+                        lowerBound: "no compare",
+                        value: "function",
+                        upperBound: 40,
+                        expression: "hello",
+                        expectedException: new PostConditionFailure(
+                            "Expression: hello",
+                            "Expected: between \"no compare\" and 40",
+                            "Actual:           \"function\""));
+
+                    AssertBetweenTest(
+                        lowerBound: "no compare",
+                        value: "oops",
+                        upperBound: 40,
+                        expectedException: new InvalidOperationException("No compare function found that matches the types System.String and System.Int32."));
+                    AssertBetweenTest(
+                        lowerBound: "no compare",
+                        value: "oops",
+                        upperBound: 40,
+                        expression: "hello",
+                        expectedException: new InvalidOperationException("No compare function found that matches the types System.String and System.Int32."));
+                });
             });
         }
     }

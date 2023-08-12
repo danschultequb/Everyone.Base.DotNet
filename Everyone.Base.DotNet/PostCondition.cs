@@ -2,23 +2,23 @@
 {
     public static class PostCondition
     {
-        private static AssertMessageFunctions messageFunctions = AssertMessageFunctions.Create();
-        public static AssertMessageFunctions MessageFunctions
+        private static AssertMessageFunctions? messageFunctions = null;
+        public static AssertMessageFunctions AssertMessageFunctions
         {
-            get { return PostCondition.messageFunctions; }
+            get { return PostCondition.messageFunctions ?? Conditions.AssertMessageFunctions; }
             set { PostCondition.messageFunctions = value; }
         }
 
-        private static CompareFunctions compareFunctions = CompareFunctions.Create();
+        private static CompareFunctions? compareFunctions = null;
         public static CompareFunctions CompareFunctions
         {
-            get { return PostCondition.compareFunctions; }
+            get { return PostCondition.compareFunctions ?? Conditions.CompareFunctions; }
             set { PostCondition.compareFunctions = value; }
         }
 
         private static AssertMessageFunctions GetAssertMessageFunctions(AssertParameters? parameters)
         {
-            return parameters?.AssertMessageFunctions ?? PostCondition.MessageFunctions;
+            return parameters?.AssertMessageFunctions ?? PostCondition.AssertMessageFunctions;
         }
 
         private static CompareFunctions GetCompareFunctions(AssertParameters? parameters)
@@ -88,6 +88,29 @@
             if (!PostCondition.GetCompareFunctions(parameters).IsNotNullAndNotEmpty(value))
             {
                 throw new PostConditionFailure(PostCondition.GetAssertMessageFunctions(parameters).ExpectedNotNullAndNotEmpty(value: value, parameters));
+            }
+        }
+
+        public static void AssertBetween<T, U, V>(T? lowerBound, U? value, V? upperBound, string? expression = null)
+        {
+            PostCondition.AssertBetween(
+                lowerBound: lowerBound,
+                value: value,
+                upperBound: upperBound,
+                parameters: new AssertParameters { Expression = expression });
+        }
+
+        public static void AssertBetween<T, U, V>(T? lowerBound, U? value, V? upperBound, AssertParameters? parameters)
+        {
+            if (!PostCondition.GetCompareFunctions(parameters).IsBetween(lowerBound, value, upperBound))
+            {
+                throw new PostConditionFailure(
+                    PostCondition.GetAssertMessageFunctions(parameters)
+                                .ExpectedBetween(
+                                    lowerBound: lowerBound,
+                                    value: value,
+                                    upperBound: upperBound,
+                                    parameters: parameters));
             }
         }
     }
