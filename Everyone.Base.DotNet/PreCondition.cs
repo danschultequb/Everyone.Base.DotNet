@@ -116,23 +116,23 @@
             }
         }
 
-        public static void AssertGreaterThanOrEqualTo<T, U>(T? value, U? upperBound, string? expression = null)
+        public static void AssertGreaterThanOrEqualTo<T, U>(T? value, U? lowerBound, string? expression = null)
         {
             PreCondition.AssertGreaterThanOrEqualTo(
                 value: value,
-                upperBound: upperBound,
+                lowerBound: lowerBound,
                 parameters: new AssertParameters { Expression = expression });
         }
 
-        public static void AssertGreaterThanOrEqualTo<T, U>(T? value, U? upperBound, AssertParameters? parameters)
+        public static void AssertGreaterThanOrEqualTo<T, U>(T? value, U? lowerBound, AssertParameters? parameters)
         {
-            if (!PreCondition.GetCompareFunctions(parameters).IsGreaterThanOrEqualTo(value, upperBound))
+            if (!PreCondition.GetCompareFunctions(parameters).IsGreaterThanOrEqualTo(value, lowerBound))
             {
                 throw new PreConditionFailure(
                     PreCondition.GetAssertMessageFunctions(parameters)
                                 .ExpectedGreaterThanOrEqualTo(
                                     value: value,
-                                    lowerBound: upperBound,
+                                    lowerBound: lowerBound,
                                     parameters: parameters));
             }
         }

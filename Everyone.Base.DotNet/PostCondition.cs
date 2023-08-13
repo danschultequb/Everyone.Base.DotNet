@@ -91,44 +91,44 @@
             }
         }
 
-        public static void AssertGreaterThan<T, U>(T? value, U? upperBound, string? expression = null)
+        public static void AssertGreaterThan<T, U>(T? value, U? lowerBound, string? expression = null)
         {
             PostCondition.AssertGreaterThan(
                 value: value,
-                upperBound: upperBound,
+                lowerBound: lowerBound,
                 parameters: new AssertParameters { Expression = expression });
         }
 
-        public static void AssertGreaterThan<T, U>(T? value, U? upperBound, AssertParameters? parameters)
+        public static void AssertGreaterThan<T, U>(T? value, U? lowerBound, AssertParameters? parameters)
         {
-            if (!PostCondition.GetCompareFunctions(parameters).IsGreaterThan(value, upperBound))
+            if (!PostCondition.GetCompareFunctions(parameters).IsGreaterThan(value, lowerBound))
             {
                 throw new PostConditionFailure(
                     PostCondition.GetAssertMessageFunctions(parameters)
                                 .ExpectedGreaterThan(
                                     value: value,
-                                    lowerBound: upperBound,
+                                    lowerBound: lowerBound,
                                     parameters: parameters));
             }
         }
 
-        public static void AssertGreaterThanOrEqualTo<T, U>(T? value, U? upperBound, string? expression = null)
+        public static void AssertGreaterThanOrEqualTo<T, U>(T? value, U? lowerBound, string? expression = null)
         {
             PostCondition.AssertGreaterThanOrEqualTo(
                 value: value,
-                upperBound: upperBound,
+                lowerBound: lowerBound,
                 parameters: new AssertParameters { Expression = expression });
         }
 
-        public static void AssertGreaterThanOrEqualTo<T, U>(T? value, U? upperBound, AssertParameters? parameters)
+        public static void AssertGreaterThanOrEqualTo<T, U>(T? value, U? lowerBound, AssertParameters? parameters)
         {
-            if (!PostCondition.GetCompareFunctions(parameters).IsGreaterThanOrEqualTo(value, upperBound))
+            if (!PostCondition.GetCompareFunctions(parameters).IsGreaterThanOrEqualTo(value, lowerBound))
             {
                 throw new PostConditionFailure(
                     PostCondition.GetAssertMessageFunctions(parameters)
                                 .ExpectedGreaterThanOrEqualTo(
                                     value: value,
-                                    lowerBound: upperBound,
+                                    lowerBound: lowerBound,
                                     parameters: parameters));
             }
         }
