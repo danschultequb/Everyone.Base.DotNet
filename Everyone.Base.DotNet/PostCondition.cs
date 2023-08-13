@@ -91,6 +91,48 @@
             }
         }
 
+        public static void AssertGreaterThan<T, U>(T? value, U? upperBound, string? expression = null)
+        {
+            PostCondition.AssertGreaterThan(
+                value: value,
+                upperBound: upperBound,
+                parameters: new AssertParameters { Expression = expression });
+        }
+
+        public static void AssertGreaterThan<T, U>(T? value, U? upperBound, AssertParameters? parameters)
+        {
+            if (!PostCondition.GetCompareFunctions(parameters).IsGreaterThan(value, upperBound))
+            {
+                throw new PostConditionFailure(
+                    PostCondition.GetAssertMessageFunctions(parameters)
+                                .ExpectedGreaterThan(
+                                    value: value,
+                                    lowerBound: upperBound,
+                                    parameters: parameters));
+            }
+        }
+
+        public static void AssertGreaterThanOrEqualTo<T, U>(T? value, U? upperBound, string? expression = null)
+        {
+            PostCondition.AssertGreaterThanOrEqualTo(
+                value: value,
+                upperBound: upperBound,
+                parameters: new AssertParameters { Expression = expression });
+        }
+
+        public static void AssertGreaterThanOrEqualTo<T, U>(T? value, U? upperBound, AssertParameters? parameters)
+        {
+            if (!PostCondition.GetCompareFunctions(parameters).IsGreaterThanOrEqualTo(value, upperBound))
+            {
+                throw new PostConditionFailure(
+                    PostCondition.GetAssertMessageFunctions(parameters)
+                                .ExpectedGreaterThanOrEqualTo(
+                                    value: value,
+                                    lowerBound: upperBound,
+                                    parameters: parameters));
+            }
+        }
+
         public static void AssertBetween<T, U, V>(T? lowerBound, U? value, V? upperBound, string? expression = null)
         {
             PostCondition.AssertBetween(

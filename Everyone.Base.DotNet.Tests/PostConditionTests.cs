@@ -297,6 +297,113 @@ namespace Everyone
                         expression: "abc");
                 });
 
+                runner.TestGroup("AssertGreaterThan<T,U>(T?,U?,string?)", () =>
+                {
+                    void AssertGreaterThanTest<T, U>(T? value, U? lowerBound, string? expression = null, Exception? expectedException = null)
+                    {
+                        runner.Test($"with {Language.AndList(new object?[] { value, lowerBound, expression }.Map(runner.ToString))}", (Test test) =>
+                        {
+                            if (expectedException == null)
+                            {
+                                PostCondition.AssertGreaterThan(value, lowerBound, expression);
+                            }
+                            else
+                            {
+                                test.AssertThrows(expectedException, () =>
+                                {
+                                    PostCondition.AssertGreaterThan(value, lowerBound, expression);
+                                });
+                            }
+                        });
+                    }
+
+                    AssertGreaterThanTest(
+                        value: 1,
+                        lowerBound: 0);
+                    AssertGreaterThanTest(
+                        value: 1,
+                        lowerBound: 0,
+                        expression: "hello");
+                    AssertGreaterThanTest(
+                        value: 1,
+                        lowerBound: 1,
+                        expectedException: new PostConditionFailure(
+                            "Expected: greater than 1",
+                            "Actual:                1"));
+                    AssertGreaterThanTest(
+                        value: 1,
+                        lowerBound: 1,
+                        expression: "hello",
+                        expectedException: new PostConditionFailure(
+                            "Expression: hello",
+                            "Expected: greater than 1",
+                            "Actual:                1"));
+                    AssertGreaterThanTest(
+                        value: 1,
+                        lowerBound: 2,
+                        expectedException: new PostConditionFailure(
+                            "Expected: greater than 2",
+                            "Actual:                1"));
+                    AssertGreaterThanTest(
+                        value: 1,
+                        lowerBound: 2,
+                        expression: "hello",
+                        expectedException: new PostConditionFailure(
+                            "Expression: hello",
+                            "Expected: greater than 2",
+                            "Actual:                1"));
+                });
+
+                runner.TestGroup("AssertGreaterThanOrEqualTo<T,U>(T?,U?,string?)", () =>
+                {
+                    void AssertGreaterThanOrEqualToTest<T, U>(T? value, U? lowerBound, string? expression = null, Exception? expectedException = null)
+                    {
+                        runner.Test($"with {Language.AndList(new object?[] { value, lowerBound, expression }.Map(runner.ToString))}", (Test test) =>
+                        {
+                            if (expectedException == null)
+                            {
+                                PostCondition.AssertGreaterThanOrEqualTo(value, lowerBound, expression);
+                            }
+                            else
+                            {
+                                test.AssertThrows(expectedException, () =>
+                                {
+                                    PostCondition.AssertGreaterThanOrEqualTo(value, lowerBound, expression);
+                                });
+                            }
+                        });
+                    }
+
+                    AssertGreaterThanOrEqualToTest(
+                        value: 1,
+                        lowerBound: 0);
+                    AssertGreaterThanOrEqualToTest(
+                        value: 1,
+                        lowerBound: 0,
+                        expression: "hello");
+                    AssertGreaterThanOrEqualToTest(
+                        value: 1,
+                        lowerBound: 1);
+                    AssertGreaterThanOrEqualToTest(
+                        value: 1,
+                        lowerBound: 1,
+                        expression: "hello");
+                    AssertGreaterThanOrEqualToTest(
+                        value: 1,
+                        lowerBound: 2,
+                        expectedException: new PostConditionFailure(
+                            "Expected: greater than or equal to 2",
+                            "Actual:                            1"));
+                    AssertGreaterThanOrEqualToTest(
+                        value: 1,
+                        lowerBound: 2,
+                        expression: "hello",
+                        expectedException: new PostConditionFailure(
+                            "Expression: hello",
+                            "Expected: greater than or equal to 2",
+                            "Actual:                            1"));
+                });
+
                 runner.TestGroup("AssertBetween<T,U,V>(T?,U?,V?,string?)", () =>
                 {
                     void AssertBetweenTest<T, U, V>(T? lowerBound, U? value, V? upperBound, string? expression = null, Exception? expectedException = null)

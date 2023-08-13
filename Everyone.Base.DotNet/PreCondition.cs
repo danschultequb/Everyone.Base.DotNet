@@ -95,6 +95,48 @@
             }
         }
 
+        public static void AssertGreaterThan<T,U>(T? value, U? lowerBound, string? expression = null)
+        {
+            PreCondition.AssertGreaterThan(
+                value: value,
+                lowerBound: lowerBound,
+                parameters: new AssertParameters { Expression = expression });
+        }
+
+        public static void AssertGreaterThan<T, U>(T? value, U? lowerBound, AssertParameters? parameters)
+        {
+            if (!PreCondition.GetCompareFunctions(parameters).IsGreaterThan(value, lowerBound))
+            {
+                throw new PreConditionFailure(
+                    PreCondition.GetAssertMessageFunctions(parameters)
+                                .ExpectedGreaterThan(
+                                    value: value,
+                                    lowerBound: lowerBound,
+                                    parameters: parameters));
+            }
+        }
+
+        public static void AssertGreaterThanOrEqualTo<T, U>(T? value, U? upperBound, string? expression = null)
+        {
+            PreCondition.AssertGreaterThanOrEqualTo(
+                value: value,
+                upperBound: upperBound,
+                parameters: new AssertParameters { Expression = expression });
+        }
+
+        public static void AssertGreaterThanOrEqualTo<T, U>(T? value, U? upperBound, AssertParameters? parameters)
+        {
+            if (!PreCondition.GetCompareFunctions(parameters).IsGreaterThanOrEqualTo(value, upperBound))
+            {
+                throw new PreConditionFailure(
+                    PreCondition.GetAssertMessageFunctions(parameters)
+                                .ExpectedGreaterThanOrEqualTo(
+                                    value: value,
+                                    lowerBound: upperBound,
+                                    parameters: parameters));
+            }
+        }
+
         public static void AssertBetween<T, U, V>(T? lowerBound, U? value, V? upperBound, string? expression = null)
         {
             PreCondition.AssertBetween(

@@ -240,6 +240,22 @@ namespace Everyone
                 parameters: parameters);
         }
 
+        public string ExpectedGreaterThan<T, U>(T? value, U? lowerBound, AssertParameters? parameters)
+        {
+            return this.Expected(
+                expected: $"greater than {this.ToString(lowerBound)}",
+                actual:   $"             {this.ToString(value)}",
+                parameters: parameters);
+        }
+
+        public string ExpectedGreaterThanOrEqualTo<T, U>(T? value, U? lowerBound, AssertParameters? parameters)
+        {
+            return this.Expected(
+                expected: $"greater than or equal to {this.ToString(lowerBound)}",
+                actual:   $"                         {this.ToString(value)}",
+                parameters: parameters);
+        }
+
         public string ExpectedBetween<T, U, V>(T? lowerBound, U? value, V? upperBound, AssertParameters? parameters)
         {
             return this.Expected(

@@ -257,6 +257,30 @@ namespace Everyone
 
         /// <summary>
         /// Get the message that explains that the provided <paramref name="value"/> should have
+        /// been greater than the provided <paramref name="lowerBound"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the <paramref name="value"/>.</typeparam>
+        /// <typeparam name="U">The type of the <paramref name="lowerBound"/>.</typeparam>
+        /// <param name="value">The <paramref name="value"/> to check.</param>
+        /// <param name="lowerBound">The <paramref name="lowerBound"/> that the
+        /// <paramref name="value"/> must be less than.</param>
+        /// <param name="parameters">The optional parameters for the error message.</param>
+        public string ExpectedGreaterThan<T, U>(T? value, U? lowerBound, AssertParameters? parameters);
+
+        /// <summary>
+        /// Get the message that explains that the provided <paramref name="value"/> should have
+        /// been greater than or equal to the provided <paramref name="lowerBound"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the <paramref name="value"/>.</typeparam>
+        /// <typeparam name="U">The type of the <paramref name="lowerBound"/>.</typeparam>
+        /// <param name="value">The <paramref name="value"/> to check.</param>
+        /// <param name="lowerBound">The <paramref name="lowerBound"/> that the
+        /// <paramref name="value"/> must be less than.</param>
+        /// <param name="parameters">The optional parameters for the error message.</param>
+        public string ExpectedGreaterThanOrEqualTo<T, U>(T? value, U? lowerBound, AssertParameters? parameters);
+
+        /// <summary>
+        /// Get the message that explains that the provided <paramref name="value"/> should have
         /// been between (inclusive) the provided <paramref name="lowerBound"/> and
         /// <paramref name="upperBound"/>.
         /// </summary>
