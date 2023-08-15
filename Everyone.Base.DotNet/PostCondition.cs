@@ -144,15 +144,21 @@
 
         public static void AssertBetween<T, U, V>(T? lowerBound, U? value, V? upperBound, AssertParameters? parameters)
         {
-            if (!PostCondition.GetCompareFunctions(parameters).IsBetween(lowerBound, value, upperBound))
+            CompareFunctions compareFunctions = PostCondition.GetCompareFunctions(parameters);
+            if (!compareFunctions.IsBetween(lowerBound, value, upperBound))
             {
+                AssertMessageFunctions messageFunctions = PostCondition.GetAssertMessageFunctions(parameters);
                 throw new PostConditionFailure(
-                    PostCondition.GetAssertMessageFunctions(parameters)
-                                .ExpectedBetween(
-                                    lowerBound: lowerBound,
-                                    value: value,
-                                    upperBound: upperBound,
-                                    parameters: parameters));
+                    compareFunctions.AreEqual(lowerBound, upperBound)
+                    ? messageFunctions.ExpectedEqual(
+                        expected: lowerBound,
+                        actual: value,
+                        parameters: parameters)
+                    : messageFunctions.ExpectedBetween(
+                        lowerBound: lowerBound,
+                        value: value,
+                        upperBound: upperBound,
+                        parameters: parameters));
             }
         }
     }

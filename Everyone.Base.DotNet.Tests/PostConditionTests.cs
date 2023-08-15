@@ -410,28 +410,36 @@ namespace Everyone
                     {
                         runner.Test($"with {Language.AndList(new object?[] { lowerBound, value, upperBound, expression }.Map(runner.ToString))}", (Test test) =>
                         {
-                            if (expectedException == null)
+                            Exception? e = test.CatchException(() =>
                             {
                                 PostCondition.AssertBetween(
                                     lowerBound: lowerBound,
                                     value: value,
                                     upperBound: upperBound,
                                     expression: expression);
-                            }
-                            else
-                            {
-                                test.AssertThrows(expectedException, () =>
-                                {
-                                    PostCondition.AssertBetween(
-                                        lowerBound: lowerBound,
-                                        value: value,
-                                        upperBound: upperBound,
-                                        expression: expression);
-                                });
-                            }
+                            });
+                            test.AssertEqual(e, expectedException);
                         });
                     }
 
+                    AssertBetweenTest(
+                        lowerBound: 1,
+                        value: 0,
+                        upperBound: 1,
+                        expectedException: new PostConditionFailure(
+                            "Expected: 1",
+                            "Actual:   0"));
+                    AssertBetweenTest(
+                        lowerBound: 1,
+                        value: 1,
+                        upperBound: 1);
+                    AssertBetweenTest(
+                        lowerBound: 1,
+                        value: 2,
+                        upperBound: 1,
+                        expectedException: new PostConditionFailure(
+                            "Expected: 1",
+                            "Actual:   2"));
                     AssertBetweenTest(
                         lowerBound: 1,
                         value: 2,
