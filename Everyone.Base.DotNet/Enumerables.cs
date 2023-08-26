@@ -8,6 +8,27 @@ namespace Everyone
 {
     public static partial class Enumerables
     {
+        public static bool Any(this IEnumerable? values)
+        {
+            bool result = false;
+            if (values != null)
+            {
+                IEnumerator enumerator = values.GetEnumerator();
+                try
+                {
+                    result = enumerator.MoveNext();
+                }
+                finally
+                {
+                    if (enumerator is IDisposable disposableEnumerator)
+                    {
+                        disposableEnumerator.Dispose();
+                    }
+                }
+            }
+            return result;
+        }
+
         public static bool SequenceEqual(this IEnumerable? lhs, IEnumerable? rhs)
         {
             return Enumerables.SequenceEqual(lhs, rhs, object.Equals);
@@ -92,10 +113,17 @@ namespace Everyone
         /// transformation from <typeparamref name="T"/> to <typeparamref name="U"/>.</param>
         public static IEnumerable<U> Map<T,U>(this IEnumerable<T> values, Func<T,U> mapFunction)
         {
-            PreCondition.AssertNotNull(values, nameof(values));
-            PreCondition.AssertNotNull(mapFunction, nameof(mapFunction));
+            Pre.Condition.AssertNotNull(values, nameof(values));
+            Pre.Condition.AssertNotNull(mapFunction, nameof(mapFunction));
 
             return values.Select(mapFunction);
+        }
+
+        public static Iterator<T> Iterate<T>(this IEnumerable<T> enumerable)
+        {
+            Pre.Condition.AssertNotNull(enumerable, nameof(enumerable));
+
+            return Iterator.Create(enumerable.GetEnumerator());
         }
     }
 }

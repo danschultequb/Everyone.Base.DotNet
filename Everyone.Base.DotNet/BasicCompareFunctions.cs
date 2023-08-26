@@ -8,7 +8,7 @@ namespace Everyone
     /// <summary>
     /// A basic implementation of the <see cref="CompareFunctions"/> interface.
     /// </summary>
-    public class BasicCompareFunctions : CompareFunctions
+    public class BasicCompareFunctions : CompareFunctionsBase
     {
         private readonly IDictionary<Type,IDictionary<Type, Func<object?, object?, bool>>> equalFunctionMap;
 
@@ -603,7 +603,9 @@ namespace Everyone
             return (T? equalLhs, U? equalRhs) => result.Invoke(equalLhs, equalRhs);
         }
 
-        public Disposable AddEqualFunction<T, U>(Func<T?, U?, bool> equalFunction)
+        public override Disposable AddEqualFunction<T, U>(Func<T?, U?, bool> equalFunction)
+            where T : default
+            where U : default
         {
             if (equalFunction == null)
             {
@@ -636,7 +638,9 @@ namespace Everyone
             });
         }
 
-        public bool AreEqual<T, U>(T? lhs, U? rhs)
+        public override bool AreEqual<T, U>(T? lhs, U? rhs)
+            where T : default
+            where U : default
         {
             bool result = object.ReferenceEquals(lhs, rhs);
             if (!result)
@@ -701,7 +705,9 @@ namespace Everyone
             return (T? compareLhs, U? compareRhs) => result.Invoke(compareLhs, compareRhs);
         }
 
-        public Disposable AddCompareFunction<T, U>(Func<T?, U?, Comparison> compareFunction)
+        public override Disposable AddCompareFunction<T, U>(Func<T?, U?, Comparison> compareFunction)
+            where T : default
+            where U : default
         {
             if (compareFunction == null)
             {
@@ -732,7 +738,9 @@ namespace Everyone
             return this.AddCompareFunction((T? lhs, U? rhs) => Comparisons.Create(compareFunction.Invoke(lhs, rhs)));
         }
 
-        public Comparison Compare<T, U>(T? lhs, U? rhs)
+        public override Comparison Compare<T, U>(T? lhs, U? rhs)
+            where T : default
+            where U : default
         {
             Func<T?, U?, Comparison> compareFunction = this.GetCompareFunction(lhs, rhs);
             return compareFunction.Invoke(lhs, rhs);

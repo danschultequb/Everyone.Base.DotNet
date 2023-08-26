@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Everyone
 {
@@ -91,6 +93,16 @@ namespace Everyone
         public static string? EscapeAndQuote(this string? value, string quote)
         {
             return Strings.Quote(Strings.Escape(value), quote);
+        }
+
+        public static string Join(this IEnumerable<string?> values, char separator)
+        {
+            return string.Join(separator, values);
+        }
+
+        public static string Join(this IEnumerable<string?> values, string separator)
+        {
+            return string.Join(separator, values);
         }
     }
 }

@@ -9,15 +9,15 @@ namespace Everyone
     {
         public static void Test(TestRunner runner)
         {
-            runner.TestGroup(typeof(BasicCompareFunctions), () =>
+            runner.TestType<BasicCompareFunctions>(() =>
             {
-                runner.Test("Create()", (Test test) =>
+                runner.TestMethod("Create()", (Test test) =>
                 {
                     BasicCompareFunctions functions = BasicCompareFunctions.Create();
                     test.AssertNotNull(functions);
                 });
 
-                runner.TestGroup("TupleEqual(ITuple?,ITuple?)", () =>
+                runner.TestMethod("TupleEqual(ITuple?,ITuple?)", () =>
                 {
                     void TupleEqualTest(ITuple? lhs, ITuple? rhs, bool expected)
                     {
@@ -43,7 +43,7 @@ namespace Everyone
                     TupleEqualTest(Tuple.Create(1, "2"), Tuple.Create(1, "2"), true);
                 });
 
-                runner.TestGroup("ExceptionEqual(Exception?,Exception?)", () =>
+                runner.TestMethod("ExceptionEqual(Exception?,Exception?)", () =>
                 {
                     void ExceptionEqualTest(Exception? lhs, Exception? rhs, bool expected)
                     {
@@ -78,7 +78,7 @@ namespace Everyone
                     ExceptionEqualTest(new IOException("a"), new IOException("b"), false);
                 });
 
-                runner.TestGroup("AddEqualFunction(Func<T?,U?,bool>)", () =>
+                runner.TestMethod("AddEqualFunction(Func<T?,U?,bool>)", () =>
                 {
                     runner.Test("with null", (Test test) =>
                     {
@@ -135,7 +135,7 @@ namespace Everyone
                     });
                 });
 
-                runner.TestGroup("Equal(T?,U?)", () =>
+                runner.TestMethod("Equal(T?,U?)", () =>
                 {
                     void EqualTest<T,U>(T? lhs, U? rhs, bool expected, string? message = null)
                     {
@@ -338,7 +338,7 @@ namespace Everyone
                     EqualTest(new Exception("abc"), new IOException("abc"), false);
                 });
 
-                runner.TestGroup("Compare<T,U>(T?,U?)", () =>
+                runner.TestMethod("Compare<T,U>(T?,U?)", () =>
                 {
                     void CompareTest<T,U>(T? lhs, U? rhs, Comparison? expectedComparison = null, Exception? expectedException = null, string? message = null)
                     {

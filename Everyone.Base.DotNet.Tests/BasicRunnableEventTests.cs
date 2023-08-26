@@ -6,15 +6,15 @@ namespace Everyone
     {
         public static void Test(TestRunner runner)
         {
-            runner.TestGroup(typeof(BasicRunnableEvent), () =>
+            runner.TestType<BasicRunnableEvent>(() =>
             {
-                runner.Test("Constructor()", (Test test) =>
+                runner.TestMethod("Constructor()", (Test test) =>
                 {
                     BasicRunnableEvent e = new BasicRunnableEvent();
                     test.AssertNotNull(e);
                 });
 
-                runner.TestGroup("Subscribe(Action)", () =>
+                runner.TestMethod("Subscribe(Action)", () =>
                 {
                     runner.Test("with null", (Test test) =>
                     {
@@ -54,15 +54,15 @@ namespace Everyone
                 });
             });
 
-            runner.TestGroup("BasicRunnableEvent<T1>", () =>
+            runner.TestType($"{Types.GetFullName<BasicRunnableEvent>()}<T1>", () =>
             {
-                runner.Test("Constructor()", (Test test) =>
+                runner.TestMethod("Constructor()", (Test test) =>
                 {
                     BasicRunnableEvent<int> e = new BasicRunnableEvent<int>();
                     test.AssertNotNull(e);
                 });
 
-                runner.TestGroup("Subscribe(Action<T1>)", () =>
+                runner.TestMethod("Subscribe(Action<T1>)", () =>
                 {
                     runner.Test("with null", (Test test) =>
                     {
@@ -102,15 +102,15 @@ namespace Everyone
                 });
             });
 
-            runner.TestGroup("BasicRunnableEvent<T1,T2>", () =>
+            runner.TestType($"{Types.GetFullName<BasicRunnableEvent>()}<T1,T2>", () =>
             {
-                runner.Test("Constructor()", (Test test) =>
+                runner.TestMethod("Constructor()", (Test test) =>
                 {
                     BasicRunnableEvent<int,bool> e = new BasicRunnableEvent<int,bool>();
                     test.AssertNotNull(e);
                 });
 
-                runner.TestGroup("Subscribe(Action<T1>)", () =>
+                runner.TestMethod("Subscribe(Action<T1>)", () =>
                 {
                     runner.Test("with null", (Test test) =>
                     {

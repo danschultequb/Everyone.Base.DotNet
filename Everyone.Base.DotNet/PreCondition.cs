@@ -1,5 +1,8 @@
-﻿namespace Everyone
+﻿using System;
+
+namespace Everyone
 {
+    [Obsolete]
     public static class PreCondition
     {
         private static AssertMessageFunctions? messageFunctions = null;
@@ -26,11 +29,13 @@
             return parameters?.CompareFunctions ?? PreCondition.CompareFunctions;
         }
 
+        [Obsolete]
         public static void AssertTrue(bool? value, string? expression = null)
         {
             PreCondition.AssertTrue(value, new AssertParameters { Expression = expression });
         }
 
+        [Obsolete]
         public static void AssertTrue(bool? value, AssertParameters? parameters)
         {
             if (!PreCondition.GetCompareFunctions(parameters).AreEqual(value, true))
@@ -39,11 +44,13 @@
             }
         }
 
+        [Obsolete]
         public static void AssertFalse(bool? value, string? expression = null)
         {
             PreCondition.AssertFalse(value, new AssertParameters { Expression = expression });
         }
 
+        [Obsolete]
         public static void AssertFalse(bool? value, AssertParameters? parameters)
         {
             if (!PreCondition.GetCompareFunctions(parameters).AreEqual(value, false))
@@ -52,11 +59,13 @@
             }
         }
 
+        [Obsolete]
         public static void AssertNull(object? value, string? expression = null)
         {
             PreCondition.AssertNull(value, new AssertParameters { Expression = expression });
         }
 
+        [Obsolete]
         public static void AssertNull(object? value, AssertParameters? parameters)
         {
             if (!PreCondition.GetCompareFunctions(parameters).IsNull(value))
@@ -65,11 +74,13 @@
             }
         }
 
+        [Obsolete]
         public static void AssertNotNull(object? value, string? expression = null)
         {
             PreCondition.AssertNotNull(value, new AssertParameters { Expression = expression });
         }
 
+        [Obsolete]
         public static void AssertNotNull(object? value, AssertParameters? parameters)
         {
             if (!PreCondition.GetCompareFunctions(parameters).IsNotNull(value))
@@ -78,11 +89,13 @@
             }
         }
 
+        [Obsolete]
         public static void AssertNotNullAndNotEmpty(string? value, string? expression = null)
         {
             PreCondition.AssertNotNullAndNotEmpty(value, new AssertParameters { Expression = expression });
         }
 
+        [Obsolete]
         public static void AssertNotNullAndNotEmpty(string? value, AssertParameters? parameters)
         {
             if (!PreCondition.GetCompareFunctions(parameters).IsNotNullAndNotEmpty(value))
@@ -95,7 +108,8 @@
             }
         }
 
-        public static void AssertGreaterThan<T,U>(T? value, U? lowerBound, string? expression = null)
+        [Obsolete]
+        public static void AssertGreaterThan<T, U>(T? value, U? lowerBound, string? expression = null)
         {
             PreCondition.AssertGreaterThan(
                 value: value,
@@ -103,6 +117,7 @@
                 parameters: new AssertParameters { Expression = expression });
         }
 
+        [Obsolete]
         public static void AssertGreaterThan<T, U>(T? value, U? lowerBound, AssertParameters? parameters)
         {
             if (!PreCondition.GetCompareFunctions(parameters).IsGreaterThan(value, lowerBound))
@@ -116,6 +131,7 @@
             }
         }
 
+        [Obsolete]
         public static void AssertGreaterThanOrEqualTo<T, U>(T? value, U? lowerBound, string? expression = null)
         {
             PreCondition.AssertGreaterThanOrEqualTo(
@@ -124,6 +140,7 @@
                 parameters: new AssertParameters { Expression = expression });
         }
 
+        [Obsolete]
         public static void AssertGreaterThanOrEqualTo<T, U>(T? value, U? lowerBound, AssertParameters? parameters)
         {
             if (!PreCondition.GetCompareFunctions(parameters).IsGreaterThanOrEqualTo(value, lowerBound))
@@ -137,6 +154,7 @@
             }
         }
 
+        [Obsolete]
         public static void AssertBetween<T, U, V>(T? lowerBound, U? value, V? upperBound, string? expression = null)
         {
             PreCondition.AssertBetween(
@@ -146,6 +164,7 @@
                 parameters: new AssertParameters { Expression = expression });
         }
 
+        [Obsolete]
         public static void AssertBetween<T, U, V>(T? lowerBound, U? value, V? upperBound, AssertParameters? parameters)
         {
             CompareFunctions compareFunctions = PreCondition.GetCompareFunctions(parameters);

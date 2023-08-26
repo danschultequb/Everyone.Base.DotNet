@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Linq;
-using Newtonsoft.Json.Linq;
-using System.Security.AccessControl;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -11,9 +8,9 @@ namespace Everyone
     {
         public static void Test(TestRunner runner)
         {
-            runner.TestGroup(typeof(Types), () =>
+            runner.TestType(typeof(Types), () =>
             {
-                runner.Test("GetType<T>()", (Test test) =>
+                runner.TestMethod("GetType<T>()", (Test test) =>
                 {
                     test.AssertEqual(typeof(object), Types.GetType<object>());
                     test.AssertEqual(typeof(object), Types.GetType<object?>());
@@ -28,7 +25,7 @@ namespace Everyone
                     test.AssertEqual(typeof(TestRunner), Types.GetType<TestRunner>());
                 });
 
-                runner.TestGroup("GetType<T>(T?)", () =>
+                runner.TestMethod("GetType<T>(T?)", () =>
                 {
                     void GetTypeTest<T>(T? value, Type expected)
                     {
@@ -47,10 +44,10 @@ namespace Everyone
                     GetTypeTest((string?)null, typeof(string));
                     GetTypeTest("", typeof(string));
                     GetTypeTest((TestGroup?)null, typeof(TestGroup));
-                    GetTypeTest(new TestGroup(name: "hello"), typeof(TestGroup));
+                    GetTypeTest(TestGroup.Create(name: "hello", parent: null, fullNameSeparator: " "), typeof(TestGroup));
                 });
 
-                runner.Test("GetFullName<T>()", (Test test) =>
+                runner.TestMethod("GetFullName<T>()", (Test test) =>
                 {
                     test.AssertEqual("System.Object", Types.GetFullName<object>());
                     test.AssertEqual("System.Object", Types.GetFullName<object?>());
@@ -65,7 +62,7 @@ namespace Everyone
                     test.AssertEqual("Everyone.TestRunner", Types.GetFullName<TestRunner>());
                 });
 
-                runner.TestGroup("GetFullName(this Type)", () =>
+                runner.TestMethod("GetFullName(this Type)", () =>
                 {
                     runner.Test($"with {runner.ToString((Type?)null)}", (Test test) =>
                     {
@@ -93,7 +90,60 @@ namespace Everyone
                     GetFullNameTest(typeof(TestRunner), "Everyone.TestRunner");
                 });
 
-                runner.TestGroup("InstanceOf<T>(this T?,Type)", () =>
+                runner.TestMethod("GetName<T>()", () =>
+                {
+                    void GetNameTest<T>(string expected)
+                    {
+                        runner.Test($"with {Types.GetFullName<T>()}", (Test test) =>
+                        {
+                            test.AssertEqual(expected, Types.GetName<T>());
+                        });
+                    }
+
+                    GetNameTest<object>("Object");
+                    GetNameTest<object?>("Object");
+                    GetNameTest<int>("Int32");
+                    GetNameTest<int?>("Nullable`1");
+                    GetNameTest<Nullable<int>>("Nullable`1");
+                    GetNameTest<bool>("Boolean");
+                    GetNameTest<bool?>("Nullable`1");
+                    GetNameTest<string>("String");
+                    GetNameTest<IComparable>("IComparable");
+                    GetNameTest<IComparable<string>>("IComparable`1");
+                    GetNameTest<TestRunner>("TestRunner");
+                });
+
+                runner.TestMethod("GetName(this Type)", () =>
+                {
+                    runner.Test($"with {runner.ToString((Type?)null)}", (Test test) =>
+                    {
+                        test.AssertThrows(() => Types.GetName(null!),
+                            new ArgumentNullException("type"));
+                    });
+
+                    void GetNameTest(Type type, string expected)
+                    {
+                        runner.Test($"with {runner.ToString(type)}", (Test test) =>
+                        {
+                            test.AssertEqual(expected, Types.GetName(type));
+                            test.AssertEqual(expected, type.GetName());
+                        });
+                    }
+
+                    GetNameTest(typeof(object), "Object");
+                    GetNameTest(typeof(int), "Int32");
+                    GetNameTest(typeof(int?), "Nullable`1");
+                    GetNameTest(typeof(Nullable<int>), "Nullable`1");
+                    GetNameTest(typeof(bool), "Boolean");
+                    GetNameTest(typeof(bool?), "Nullable`1");
+                    GetNameTest(typeof(Nullable<bool>), "Nullable`1");
+                    GetNameTest(typeof(string), "String");
+                    GetNameTest(typeof(IComparable), "IComparable");
+                    GetNameTest(typeof(IComparable<string>), "IComparable`1");
+                    GetNameTest(typeof(TestRunner), "TestRunner");
+                });
+
+                runner.TestMethod("InstanceOf<T>(this T?,Type)", () =>
                 {
                     void InstanceOfErrorTest<T>(T? value, Type baseType, Exception expected)
                     {
@@ -136,7 +186,7 @@ namespace Everyone
                     InstanceOfTest(new List<int>(), typeof(string), false);
                 });
 
-                runner.TestGroup("InstanceOf(this Type,Type)", () =>
+                runner.TestMethod("InstanceOf(this Type,Type)", () =>
                 {
                     void InstanceOfErrorTest(Type valueType, Type baseType, Exception expected)
                     {

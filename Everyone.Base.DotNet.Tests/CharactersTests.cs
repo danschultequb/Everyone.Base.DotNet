@@ -4,9 +4,9 @@
     {
         public static void Test(TestRunner runner)
         {
-            runner.TestGroup(typeof(Characters), () =>
+            runner.TestType(typeof(Characters), () =>
             {
-                runner.TestGroup("Escape(this char?)", () =>
+                runner.TestMethod("Escape(this char?)", () =>
                 {
                     void EscapeTest(char? caller, string? expected)
                     {
@@ -38,7 +38,7 @@
                     EscapeTest('\xF', "\xF");
                 });
 
-                runner.TestGroup("Escape(this char)", () =>
+                runner.TestMethod("Escape(this char)", () =>
                 {
                     void EscapeTest(char caller, string expected)
                     {
@@ -69,7 +69,7 @@
                     EscapeTest('\xF', "\xF");
                 });
 
-                runner.TestGroup("Quote(this char?)", () =>
+                runner.TestMethod("Quote(this char?)", () =>
                 {
                     void QuoteTest(char? value, string? expected)
                     {
@@ -85,7 +85,7 @@
                     QuoteTest('\n', "'\n'");
                 });
 
-                runner.TestGroup("Quote(this char)", () =>
+                runner.TestMethod("Quote(this char)", () =>
                 {
                     void QuoteTest(char value, string expected)
                     {
@@ -100,7 +100,7 @@
                     QuoteTest('\n', "'\n'");
                 });
 
-                runner.TestGroup("Quote(this char?, char)", () =>
+                runner.TestMethod("Quote(this char?, char)", () =>
                 {
                     void QuoteTest(char? value, char quote, string? expected)
                     {
@@ -122,7 +122,7 @@
                     QuoteTest('\n', 'a', "a\na");
                 });
 
-                runner.TestGroup("Quote(this char, char)", () =>
+                runner.TestMethod("Quote(this char, char)", () =>
                 {
                     void QuoteTest(char value, char quote, string expected)
                     {
@@ -141,7 +141,7 @@
                     QuoteTest('\n', 'a', "a\na");
                 });
 
-                runner.TestGroup("Quote(this char?, string)", () =>
+                runner.TestMethod("Quote(this char?, string)", () =>
                 {
                     void QuoteTest(char? value, string quote, string? expected)
                     {
@@ -166,7 +166,7 @@
                     QuoteTest('\n', "abc", "abc\nabc");
                 });
 
-                runner.TestGroup("Quote(this char, string)", () =>
+                runner.TestMethod("Quote(this char, string)", () =>
                 {
                     void QuoteTest(char value, string quote, string expected)
                     {
@@ -187,7 +187,7 @@
                     QuoteTest('\n', "abc", "abc\nabc");
                 });
 
-                runner.TestGroup("EscapeAndQuote(this char?)", () =>
+                runner.TestMethod("EscapeAndQuote(this char?)", () =>
                 {
                     void EscapeAndQuoteTest(char? value, string? expected)
                     {
@@ -203,7 +203,7 @@
                     EscapeAndQuoteTest('\n', "'\\n'");
                 });
 
-                runner.TestGroup("EscapeAndQuote(this char)", () =>
+                runner.TestMethod("EscapeAndQuote(this char)", () =>
                 {
                     void EscapeAndQuoteTest(char value, string expected)
                     {
@@ -218,7 +218,7 @@
                     EscapeAndQuoteTest('\n', "'\\n'");
                 });
 
-                runner.TestGroup("EscapeAndQuote(this char?, char)", () =>
+                runner.TestMethod("EscapeAndQuote(this char?, char)", () =>
                 {
                     void EscapeAndQuoteTest(char? value, char quote, string? expected)
                     {
@@ -240,7 +240,7 @@
                     EscapeAndQuoteTest('\n', 'b', "b\\nb");
                 });
 
-                runner.TestGroup("EscapeAndQuote(this char, char)", () =>
+                runner.TestMethod("EscapeAndQuote(this char, char)", () =>
                 {
                     void EscapeAndQuoteTest(char value, char quote, string expected)
                     {
@@ -259,7 +259,7 @@
                     EscapeAndQuoteTest('\n', 'b', "b\\nb");
                 });
 
-                runner.TestGroup("EscapeAndQuote(this char?, string)", () =>
+                runner.TestMethod("EscapeAndQuote(this char?, string)", () =>
                 {
                     void EscapeAndQuoteTest(char? value, string quote, string? expected)
                     {
@@ -284,7 +284,7 @@
                     EscapeAndQuoteTest('\n', "cd", "cd\\ncd");
                 });
 
-                runner.TestGroup("EscapeAndQuote(this char, string)", () =>
+                runner.TestMethod("EscapeAndQuote(this char, string)", () =>
                 {
                     void EscapeAndQuoteTest(char value, string quote, string expected)
                     {

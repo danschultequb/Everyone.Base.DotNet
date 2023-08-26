@@ -7,9 +7,9 @@ namespace Everyone
     {
         public static void Test(TestRunner runner)
         {
-            runner.TestGroup(typeof(StringBuilders), () =>
+            runner.TestType(typeof(StringBuilders), () =>
             {
-                runner.TestGroup("EndsWith(this StringBuilder,char)", () =>
+                runner.TestMethod("EndsWith(this StringBuilder,char)", () =>
                 {
                     void EndsWithTest(StringBuilder builder, char value, bool expected)
                     {

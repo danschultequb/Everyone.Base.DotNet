@@ -7,25 +7,25 @@ namespace Everyone
     {
         public static void Test(TestRunner runner)
         {
-            runner.TestGroup(typeof(RunnableEvent), () =>
+            runner.TestType<RunnableEvent>(() =>
             {
                 RunnableEventTests.Test(runner, RunnableEvent.Create);
                 RunnableEventTests.Test(runner, RunnableEvent.Create<int>);
                 RunnableEventTests.Test(runner, RunnableEvent.Create<int, bool>);
 
-                runner.Test("Create()", (Test test) =>
+                runner.TestMethod("Create()", (Test test) =>
                 {
                     RunnableEvent e = RunnableEvent.Create();
                     test.AssertNotNull(e);
                 });
 
-                runner.Test("Create<T1>()", (Test test) =>
+                runner.TestMethod("Create<T1>()", (Test test) =>
                 {
                     RunnableEvent<int> e = RunnableEvent.Create<int>();
                     test.AssertNotNull(e);
                 });
 
-                runner.Test("Create<T1,T2>()", (Test test) =>
+                runner.TestMethod("Create<T1,T2>()", (Test test) =>
                 {
                     RunnableEvent<int,bool> e = RunnableEvent.Create<int,bool>();
                     test.AssertNotNull(e);
@@ -35,11 +35,11 @@ namespace Everyone
 
         public static void Test(TestRunner runner, Func<RunnableEvent> creator)
         {
-            runner.TestGroup(typeof(RunnableEvent), () =>
+            runner.TestType<RunnableEvent>(() =>
             {
                 EventTests.Test(runner, creator);
 
-                runner.TestGroup("Invoke()", () =>
+                runner.TestMethod("Invoke()", () =>
                 {
                     runner.Test("with no subscribers", (Test test) =>
                     {
@@ -84,11 +84,11 @@ namespace Everyone
 
         public static void Test(TestRunner runner, Func<RunnableEvent<int>> creator)
         {
-            runner.TestGroup("RunnableEvent<T1>", () =>
+            runner.TestType($"{Types.GetFullName<RunnableEvent>()}<T1>", () =>
             {
                 EventTests.Test(runner, creator);
 
-                runner.TestGroup("Invoke()", () =>
+                runner.TestMethod("Invoke(T1)", () =>
                 {
                     runner.Test("with no subscribers", (Test test) =>
                     {
@@ -133,11 +133,11 @@ namespace Everyone
 
         public static void Test(TestRunner runner, Func<RunnableEvent<int,bool>> creator)
         {
-            runner.TestGroup("RunnableEvent<T1,T2>", () =>
+            runner.TestType($"{Types.GetFullName<RunnableEvent>()}<T1,T2>", () =>
             {
                 EventTests.Test(runner, creator);
 
-                runner.TestGroup("Invoke()", () =>
+                runner.TestMethod("Invoke()", () =>
                 {
                     runner.Test("with no subscribers", (Test test) =>
                     {

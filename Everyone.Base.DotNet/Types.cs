@@ -21,25 +21,9 @@ namespace Everyone
             return value?.GetType() ?? Types.GetType<T>();
         }
 
-        [Obsolete]
-        public static string GetTypeFullName<T>()
-        {
-            return Types.GetFullName(Types.GetType<T>());
-        }
-
         public static string GetFullName<T>()
         {
             return Types.GetFullName(Types.GetType<T>());
-        }
-
-        [Obsolete]
-        public static string GetTypeFullName(this Type type)
-        {
-            if (type == null)
-            {
-                throw new ArgumentNullException(nameof(type));
-            }
-            return type.FullName ?? type.Name;
         }
 
         public static string GetFullName(this Type type)
@@ -52,10 +36,19 @@ namespace Everyone
             return type.FullName ?? type.Name;
         }
 
-        [Obsolete]
-        public static string GetTypeFullName<T>(T? value)
+        public static string GetName<T>()
         {
-            return Types.GetFullName(Types.GetType<T>(value));
+            return Types.GetName(Types.GetType<T>());
+        }
+
+        public static string GetName(this Type type)
+        {
+            if (type == null)
+            {
+                throw new ArgumentNullException(nameof(type));
+            }
+
+            return type.Name;
         }
 
         public static string GetFullName<T>(T? value)

@@ -6,21 +6,21 @@ namespace Everyone
     {
         public static void Test(TestRunner runner)
         {
-            runner.TestGroup(typeof(Event), () =>
+            runner.TestType<Event>(() =>
             {
-                runner.Test("Create()", (Test test) =>
+                runner.TestMethod("Create()", (Test test) =>
                 {
                     RunnableEvent e = Event.Create();
                     test.AssertNotNull(e);
                 });
 
-                runner.Test("Create<T1>()", (Test test) =>
+                runner.TestMethod("Create<T1>()", (Test test) =>
                 {
                     RunnableEvent<int> e = Event.Create<int>();
                     test.AssertNotNull(e);
                 });
 
-                runner.Test("Create<T1,T2>()", (Test test) =>
+                runner.TestMethod("Create<T1,T2>()", (Test test) =>
                 {
                     RunnableEvent<int,bool> e = Event.Create<int,bool>();
                     test.AssertNotNull(e);
@@ -30,9 +30,9 @@ namespace Everyone
 
         public static void Test(TestRunner runner, Func<Event> creator)
         {
-            runner.TestGroup(typeof(Event), () =>
+            runner.TestType<Event>(() =>
             {
-                runner.TestGroup("Subscribe(Action)", () =>
+                runner.TestMethod("Subscribe(Action)", () =>
                 {
                     runner.Test("with null", (Test test) =>
                     {
@@ -66,9 +66,9 @@ namespace Everyone
 
         public static void Test(TestRunner runner, Func<Event<int>> creator)
         {
-            runner.TestGroup(typeof(Event), () =>
+            runner.TestType("Event<T1>", () =>
             {
-                runner.TestGroup("Subscribe(Action<T1>)", () =>
+                runner.TestMethod("Subscribe(Action<T1>)", () =>
                 {
                     runner.Test("with null", (Test test) =>
                     {
@@ -102,9 +102,9 @@ namespace Everyone
 
         public static void Test(TestRunner runner, Func<Event<int,bool>> creator)
         {
-            runner.TestGroup(typeof(Event), () =>
+            runner.TestType("Event<T1,T2>", () =>
             {
-                runner.TestGroup("Subscribe(Action<T1,T2>)", () =>
+                runner.TestMethod("Subscribe(Action<T1,T2>)", () =>
                 {
                     runner.Test("with null", (Test test) =>
                     {

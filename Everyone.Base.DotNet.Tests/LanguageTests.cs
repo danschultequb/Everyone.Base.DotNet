@@ -4,9 +4,9 @@
     {
         public static void Test(TestRunner runner)
         {
-            runner.TestGroup(typeof(Language), () =>
+            runner.TestType(typeof(Language), () =>
             {
-                runner.TestGroup("AndList(params object?[])", () =>
+                runner.TestMethod("AndList(params object?[])", () =>
                 {
                     void AndListTest(object?[] values, string expected)
                     {

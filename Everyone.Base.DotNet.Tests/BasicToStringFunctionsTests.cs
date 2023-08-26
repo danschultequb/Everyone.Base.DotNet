@@ -8,15 +8,15 @@ namespace Everyone
     {
         public static void Test(TestRunner runner)
         {
-            runner.TestGroup(typeof(BasicToStringFunctions), () =>
+            runner.TestType<BasicToStringFunctions>(() =>
             {
-                runner.Test("Create()", (Test test) =>
+                runner.TestMethod("Create()", (Test test) =>
                 {
                     BasicToStringFunctions functions = BasicToStringFunctions.Create();
                     test.AssertNotNull(functions);
                 });
 
-                runner.TestGroup("CharacterToString(char?)", () =>
+                runner.TestMethod("CharacterToString(char?)", () =>
                 {
                     void CharacterToStringTest(char? value, string expected)
                     {
@@ -36,7 +36,7 @@ namespace Everyone
                     CharacterToStringTest('\v', "'\\v'");
                 });
 
-                runner.TestGroup("StringToString(string?)", () =>
+                runner.TestMethod("StringToString(string?)", () =>
                 {
                     void StringToStringTest(string? value, string expected)
                     {
@@ -53,7 +53,7 @@ namespace Everyone
                     StringToStringTest("a\r\nb", "\"a\\r\\nb\"");
                 });
 
-                runner.TestGroup("EnumerableToString(IEnumerable?)", () =>
+                runner.TestMethod("EnumerableToString(IEnumerable?)", () =>
                 {
                     void EnumerableToStringTest(IEnumerable? value, string expected)
                     {
@@ -71,7 +71,7 @@ namespace Everyone
                     EnumerableToStringTest(new[] { "1", "2", "3" }, "[\"1\",\"2\",\"3\"]");
                 });
 
-                runner.TestGroup("TupleToString(ITuple?)", () =>
+                runner.TestMethod("TupleToString(ITuple?)", () =>
                 {
                     void TupleToStringTest(ITuple? value, string expected)
                     {
@@ -88,7 +88,7 @@ namespace Everyone
                     TupleToStringTest(Tuple.Create("1", 2, 'c'), "(\"1\",2,'c')");
                 });
 
-                runner.TestGroup("ExceptionToString(Exception?)", () =>
+                runner.TestMethod("ExceptionToString(Exception?)", () =>
                 {
                     void ExceptionToStringTest(Exception? value, string expected)
                     {
@@ -105,7 +105,7 @@ namespace Everyone
                     ExceptionToStringTest(new ArgumentException("a"), "System.ArgumentException: \"a\"");
                 });
 
-                runner.TestGroup("ToString(T?)", () =>
+                runner.TestMethod("ToString(T?)", () =>
                 {
                     void ToStringTest<T>(T? value, string expected)
                     {
@@ -148,7 +148,7 @@ namespace Everyone
                     ToStringTest(new ArgumentException("a"), "System.ArgumentException: \"a\"");
                 });
 
-                runner.TestGroup("AddToStringFunction(Func<T?,string>)", () =>
+                runner.TestMethod("AddToStringFunction(Func<T?,string>)", () =>
                 {
                     runner.Test("with null", (Test test) =>
                     {

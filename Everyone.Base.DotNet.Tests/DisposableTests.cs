@@ -6,9 +6,9 @@ namespace Everyone
     {
         public static void Test(TestRunner runner)
         {
-            runner.TestGroup(typeof(Disposable), () =>
+            runner.TestType(typeof(Disposable), () =>
             {
-                runner.TestGroup("Create(Action)", () =>
+                runner.TestMethod("Create(Action)", () =>
                 {
                     runner.Test("with null", (Test test) =>
                     {

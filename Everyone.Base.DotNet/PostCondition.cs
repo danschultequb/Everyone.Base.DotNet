@@ -1,5 +1,8 @@
-﻿namespace Everyone
+﻿using System;
+
+namespace Everyone
 {
+    [Obsolete]
     public static class PostCondition
     {
         private static AssertMessageFunctions? messageFunctions = null;
