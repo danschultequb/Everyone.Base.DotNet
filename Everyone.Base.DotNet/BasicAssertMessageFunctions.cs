@@ -155,5 +155,21 @@ namespace Everyone
                 actual:   $"{this.ToString(value)}",
                 parameters: parameters);
         }
+
+        public string ExpectedDisposed(Disposable value, AssertParameters? parameters)
+        {
+            return this.Expected(
+                expected: "disposed",
+                actual: "not disposed",
+                parameters: parameters);
+        }
+
+        public string ExpectedNotDisposed(Disposable value, AssertParameters? parameters)
+        {
+            return this.Expected(
+                expected: "not disposed",
+                actual: "disposed",
+                parameters: parameters);
+        }
     }
 }

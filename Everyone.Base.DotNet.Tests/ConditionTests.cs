@@ -5,14 +5,14 @@ namespace Everyone
 {
     public static class ConditionTests
     {
-        public static Condition CreateCondition()
+        public static Assertions CreateCondition()
         {
-            return Condition.Create((string message) => new PreConditionFailure(message));
+            return Assertions.Create((string message) => new PreConditionFailure(message));
         }
 
         public static void Test(TestRunner runner)
         {
-            runner.TestType<Condition>(() =>
+            runner.TestType<Assertions>(() =>
             {
                 runner.TestMethod("Create(Func<string,Exception>,AssertMessageFunctions?,CompareFunctions?)", () =>
                 {
@@ -22,7 +22,7 @@ namespace Everyone
                         {
                             test.AssertThrows(expectedException, () =>
                             {
-                                Condition.Create(createExceptionFunction!, assertMessageFunctions, compareFunctions);
+                                Assertions.Create(createExceptionFunction!, assertMessageFunctions, compareFunctions);
                             });
                         });
                     }
@@ -56,7 +56,7 @@ namespace Everyone
                     {
                         runner.Test($"with {runner.ToString(message)}", (Test test) =>
                         {
-                            Condition condition = ConditionTests.CreateCondition();
+                            Assertions condition = ConditionTests.CreateCondition();
                             test.AssertThrows(expectedException, () => condition.Fail(message));
                         });
                     }
@@ -78,7 +78,7 @@ namespace Everyone
                     {
                         runner.Test($"with {Language.AndList(new object?[] { value, expression, message }.Select(runner.ToString))}", (Test test) =>
                         {
-                            Condition condition = ConditionTests.CreateCondition();
+                            Assertions condition = ConditionTests.CreateCondition();
                             
                             test.AssertThrows(expectedException, () =>
                             {
@@ -156,7 +156,7 @@ namespace Everyone
                     {
                         runner.Test($"with {Language.AndList(runner.ToString(value), parameters)}", (Test test) =>
                         {
-                            Condition condition = ConditionTests.CreateCondition();
+                            Assertions condition = ConditionTests.CreateCondition();
                             test.AssertThrows(expectedException, () =>
                             {
                                 condition.AssertTrue(
@@ -180,7 +180,7 @@ namespace Everyone
                     {
                         runner.Test($"with {Language.AndList(new object?[] { value, expression, message }.Select(runner.ToString))}", (Test test) =>
                         {
-                            Condition condition = ConditionTests.CreateCondition();
+                            Assertions condition = ConditionTests.CreateCondition();
                             test.AssertThrows(expectedException, () =>
                             {
                                 condition.AssertFalse(
@@ -257,7 +257,7 @@ namespace Everyone
                     {
                         runner.Test($"with {Language.AndList(runner.ToString(value), parameters)}", (Test test) =>
                         {
-                            Condition condition = ConditionTests.CreateCondition();
+                            Assertions condition = ConditionTests.CreateCondition();
                             test.AssertThrows(expectedException, () =>
                             {
                                 condition.AssertFalse(
@@ -281,7 +281,7 @@ namespace Everyone
                     {
                         runner.Test($"with {Language.AndList(new object?[] { value, expression, message }.Select(runner.ToString))}", (Test test) =>
                         {
-                            Condition condition = ConditionTests.CreateCondition();
+                            Assertions condition = ConditionTests.CreateCondition();
                             test.AssertThrows(expectedException, () =>
                             {
                                 condition.AssertNull(value, expression, message);

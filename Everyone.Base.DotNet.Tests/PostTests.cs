@@ -8,7 +8,7 @@
             {
                 runner.Test("Condition", (Test test) =>
                 {
-                    Condition postCondition = Post.Condition;
+                    Assertions postCondition = Post.Condition;
                     test.AssertNotNull(postCondition);
                 });
             });

@@ -2,6 +2,6 @@
 {
     public static class Post
     {
-        public static Condition Condition { get; } = Condition.Create((string message) => new PostConditionFailure(message));
+        public static Assertions Condition { get; } = Assertions.Create((string message) => new PostConditionFailure(message));
     }
 }

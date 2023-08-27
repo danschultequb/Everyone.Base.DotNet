@@ -157,5 +157,21 @@ namespace Everyone
         /// <paramref name="value"/> must be less than or equal to.</param>
         /// <param name="parameters">The optional parameters for the error message.</param>
         public string ExpectedBetween<T,U,V>(T? lowerBound, U? value, V? upperBound, AssertParameters? parameters);
+
+        /// <summary>
+        /// Get the message that explains that the provided <see cref="Disposable"/> should have
+        /// been disposed.
+        /// </summary>
+        /// <param name="value">The value to that should've been disposed.</param>
+        /// <param name="parameters">The optional parameters for the error message.</param>
+        public string ExpectedDisposed(Disposable value, AssertParameters? parameters);
+
+        /// <summary>
+        /// Get the message that explains that the provided <see cref="Disposable"/> should have
+        /// been not disposed.
+        /// </summary>
+        /// <param name="value">The value to that should've been not disposed.</param>
+        /// <param name="parameters">The optional parameters for the error message.</param>
+        public string ExpectedNotDisposed(Disposable value, AssertParameters? parameters);
     }
 }
