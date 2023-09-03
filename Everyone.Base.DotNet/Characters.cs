@@ -1,4 +1,6 @@
-﻿namespace Everyone
+﻿using System.Collections.Generic;
+
+namespace Everyone
 {
     /// <summary>
     /// A collection of methods for extending the built in <see cref="char"/> type.
@@ -11,68 +13,75 @@
         /// Escape the provided <see cref="string"/> so that all escape sequences are revealed.
         /// </summary>
         /// <param name="value">The <see cref="string"/> to escape.</param>
-        public static string? Escape(this char? value)
+        public static string? Escape(this char? value, IEnumerable<char>? dontEscape = null)
         {
-            return value == null ? null : Characters.Escape((char)value);
+            return value == null ? null : Characters.Escape((char)value, dontEscape);
         }
 
         /// <summary>
         /// Escape the provided <see cref="string"/> so that all escape sequences are revealed.
         /// </summary>
         /// <param name="value">The <see cref="string"/> to escape.</param>
-        public static string Escape(this char value)
+        public static string Escape(this char value, IEnumerable<char>? dontEscape = null)
         {
             string result;
 
-            switch (value)
+            if (dontEscape?.Contains(value) == true)
             {
-                case '\'':
-                    result = "\\'";
-                    break;
+                result = value.ToString();
+            }
+            else
+            {
+                switch (value)
+                {
+                    case '\'':
+                        result = "\\'";
+                        break;
 
-                case '\"':
-                    result = "\\\"";
-                    break;
+                    case '\"':
+                        result = "\\\"";
+                        break;
 
-                case '\\':
-                    result = "\\\\";
-                    break;
+                    case '\\':
+                        result = "\\\\";
+                        break;
 
-                case '\0':
-                    result = "\\0";
-                    break;
+                    case '\0':
+                        result = "\\0";
+                        break;
 
-                case '\a':
-                    result = "\\a";
-                    break;
+                    case '\a':
+                        result = "\\a";
+                        break;
 
-                case '\b':
-                    result = "\\b";
-                    break;
+                    case '\b':
+                        result = "\\b";
+                        break;
 
-                case '\f':
-                    result = "\\f";
-                    break;
+                    case '\f':
+                        result = "\\f";
+                        break;
 
-                case '\n':
-                    result = "\\n";
-                    break;
+                    case '\n':
+                        result = "\\n";
+                        break;
 
-                case '\r':
-                    result = "\\r";
-                    break;
+                    case '\r':
+                        result = "\\r";
+                        break;
 
-                case '\t':
-                    result = "\\t";
-                    break;
+                    case '\t':
+                        result = "\\t";
+                        break;
 
-                case '\v':
-                    result = "\\v";
-                    break;
+                    case '\v':
+                        result = "\\v";
+                        break;
 
-                default:
-                    result = value.ToString();
-                    break;
+                    default:
+                        result = value.ToString();
+                        break;
+                }
             }
 
             return result!;
@@ -142,54 +151,68 @@
         /// Escape and quote the provided <see cref="string"/>.
         /// </summary>
         /// <param name="value">The value to quote.</param>
-        public static string? EscapeAndQuote(this char? value)
+        public static string? EscapeAndQuote(this char? value, IEnumerable<char>? dontEscape = null)
         {
-            return value == null ? null : Characters.EscapeAndQuote((char)value);
+            return value == null ? null : Characters.EscapeAndQuote((char)value, dontEscape);
         }
 
         /// <summary>
         /// Escape and quote the provided <see cref="string"/>.
         /// </summary>
         /// <param name="value">The value to quote.</param>
-        public static string EscapeAndQuote(this char value)
+        public static string EscapeAndQuote(this char value, IEnumerable<char>? dontEscape = null)
         {
-            return Characters.EscapeAndQuote(value, Characters.defaultQuote);
+            return Characters.EscapeAndQuote(value, Characters.defaultQuote, dontEscape);
         }
 
         /// <summary>
         /// Escape and quote the provided <see cref="string"/>.
         /// </summary>
         /// <param name="value">The value to quote.</param>
-        public static string? EscapeAndQuote(this char? value, char quote)
+        public static string? EscapeAndQuote(this char? value, char quote, IEnumerable<char>? dontEscape = null)
         {
-            return Strings.Quote(Characters.Escape(value), quote);
+            return Strings.Quote(Characters.Escape(value, dontEscape), quote);
         }
 
         /// <summary>
         /// Escape and quote the provided <see cref="string"/>.
         /// </summary>
         /// <param name="value">The value to quote.</param>
-        public static string EscapeAndQuote(this char value, char quote)
+        public static string EscapeAndQuote(this char value, char quote, IEnumerable<char>? dontEscape = null)
         {
-            return Strings.Quote(Characters.Escape(value), quote)!;
+            return Strings.Quote(Characters.Escape(value, dontEscape), quote)!;
         }
 
         /// <summary>
         /// Escape and quote the provided <see cref="string"/>.
         /// </summary>
         /// <param name="value">The value to quote.</param>
-        public static string? EscapeAndQuote(this char? value, string quote)
+        public static string? EscapeAndQuote(this char? value, string quote, IEnumerable<char>? dontEscape = null)
         {
-            return Strings.Quote(Characters.Escape(value), quote);
+            return Strings.Quote(Characters.Escape(value, dontEscape), quote);
         }
 
         /// <summary>
         /// Escape and quote the provided <see cref="string"/>.
         /// </summary>
         /// <param name="value">The value to quote.</param>
-        public static string EscapeAndQuote(this char value, string quote)
+        public static string EscapeAndQuote(this char value, string quote, IEnumerable<char>? dontEscape = null)
         {
-            return Strings.Quote(Characters.Escape(value), quote)!;
+            if (dontEscape == null)
+            {
+                if (quote == "\'")
+                {
+                    dontEscape = new[] { '"' };
+                }
+                else if (quote == "\"")
+                {
+                    dontEscape = new[] { '\'' };
+                }
+            }
+
+            string result = Characters.Escape(value, dontEscape);
+            result = Strings.Quote(result, quote)!;
+            return result;
         }
     }
 }

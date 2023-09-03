@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace Everyone
 {
@@ -157,6 +159,32 @@ namespace Everyone
         /// <param name="parameters">The <see cref="AssertParameters"/> to provide to the
         /// assertion.</param>
         public Assertions AssertNotDisposed(Disposable value, AssertParameters? parameters);
+
+        /// <summary>
+        /// Assert that the provided <paramref name="value"/> is one of the provided
+        /// <paramref name="possibilities"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of values to compare.</typeparam>
+        /// <param name="value">The value to look for.</param>
+        /// <param name="possibilities">The possible values that the the <paramref name="value"/>
+        /// should be.</param>
+        /// <param name="expression">The name of the expression that produced the
+        /// <paramref name="value"/>.</param>
+        /// <param name="message">The error message to display if the assertion fails.</param>
+        /// <returns>This object for method chaining.</returns>
+        public Assertions AssertOneOf<T,U>(T value, IEnumerable<U> possibilities, string? expression = null, string? message = null);
+
+        /// <summary>
+        /// Assert that the provided <paramref name="value"/> is one of the provided
+        /// <paramref name="possibilities"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of values to compare.</typeparam>
+        /// <param name="value">The value to look for.</param>
+        /// <param name="possibilities">The possible values that the the <paramref name="value"/>
+        /// <param name="parameters">The <see cref="AssertParameters"/> to provide to the
+        /// assertion.</param>
+        /// <returns>This object for method chaining.</returns>
+        public Assertions AssertOneOf<T,U>(T value, IEnumerable<U> possibilities, AssertParameters? parameters);
     }
 
     /// <summary>
@@ -920,6 +948,33 @@ namespace Everyone
                             parameters: parameters));
             }
             return (this as TAssertions)!;
+        }
+
+        public Assertions AssertOneOf<T,U>(T value, IEnumerable<U> possibilities, string? expression = null, string? message = null)
+        {
+            return this.AssertOneOf(
+                value: value,
+                possibilities: possibilities,
+                parameters: new AssertParameters
+                {
+                    Expression = expression,
+                    Message = message,
+                });
+        }
+
+        public Assertions AssertOneOf<T,U>(T value, IEnumerable<U> possibilities, AssertParameters? parameters)
+        {
+            CompareFunctions compareFunctions = this.GetCompareFunctions(parameters);
+            if (possibilities?.Contains(value, (T value, U possibleValue) => compareFunctions.AreEqual(value, possibleValue)) != true)
+            {
+                throw this.createExceptionFunction(
+                    this.GetAssertMessageFunctions(parameters)
+                        .ExpectedOneOf(
+                            value: value,
+                            possibilities: possibilities!,
+                            parameters: parameters));
+            }
+            return this;
         }
     }
 }

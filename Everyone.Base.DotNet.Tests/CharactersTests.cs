@@ -1,4 +1,6 @@
-﻿namespace Everyone
+﻿using System.Collections.Generic;
+
+namespace Everyone
 {
     public static class CharactersTests
     {
@@ -6,36 +8,39 @@
         {
             runner.TestType(typeof(Characters), () =>
             {
-                runner.TestMethod("Escape(this char?)", () =>
+                runner.TestMethod("Escape(this char?,IEnumerable<char>?)", () =>
                 {
-                    void EscapeTest(char? caller, string? expected)
+                    void EscapeTest(char? caller, IEnumerable<char>? dontEscape, string? expected)
                     {
-                        runner.Test($"with {Characters.Escape(caller)}", (Test test) =>
+                        runner.Test($"with {Language.AndList(new object?[] { caller, dontEscape }.Map(runner.ToString))}", (Test test) =>
                         {
-                            test.AssertEqual(expected, Characters.Escape(caller));
-                            test.AssertEqual(expected, caller.Escape());
+                            test.AssertEqual(expected, Characters.Escape(caller, dontEscape));
+                            test.AssertEqual(expected, caller.Escape(dontEscape));
                         });
                     }
 
-                    EscapeTest(null, null);
-                    EscapeTest('a', "a");
-                    EscapeTest('\'', "\\'");
-                    EscapeTest('\"', "\\\"");
-                    EscapeTest('\\', "\\\\");
-                    EscapeTest('\0', "\\0");
-                    EscapeTest('\a', "\\a");
-                    EscapeTest('\b', "\\b");
-                    EscapeTest('\f', "\\f");
-                    EscapeTest('\n', "\\n");
-                    EscapeTest('\r', "\\r");
-                    EscapeTest('\t', "\\t");
-                    EscapeTest('\v', "\\v");
-                    EscapeTest('\u0000', "\\0");
-                    EscapeTest('\uFFFF', "\uFFFF");
-                    EscapeTest('\U00000000', "\\0");
-                    EscapeTest('\x0', "\\0");
-                    EscapeTest('\x00', "\\0");
-                    EscapeTest('\xF', "\xF");
+                    EscapeTest(null, null, null);
+                    EscapeTest('a', null, "a");
+                    EscapeTest('\'', null, "\\'");
+                    EscapeTest('\"', null, "\\\"");
+                    EscapeTest('\\', null, "\\\\");
+                    EscapeTest('\0', null, "\\0");
+                    EscapeTest('\a', null, "\\a");
+                    EscapeTest('\b', null, "\\b");
+                    EscapeTest('\f', null, "\\f");
+                    EscapeTest('\n', null, "\\n");
+                    EscapeTest('\r', null, "\\r");
+                    EscapeTest('\t', null, "\\t");
+                    EscapeTest('\v', null, "\\v");
+                    EscapeTest('\u0000', null, "\\0");
+                    EscapeTest('\uFFFF', null, "\uFFFF");
+                    EscapeTest('\U00000000', null, "\\0");
+                    EscapeTest('\x0', null, "\\0");
+                    EscapeTest('\x00', null, "\\0");
+                    EscapeTest('\xF', null, "\xF");
+
+                    EscapeTest('\'', new[] { '\'' }, "'");
+                    EscapeTest('\'', new[] { '\"' }, "\\'");
                 });
 
                 runner.TestMethod("Escape(this char)", () =>

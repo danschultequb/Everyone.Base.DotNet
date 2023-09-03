@@ -147,7 +147,7 @@
                     EscapeAndQuoteTest("", '\'', "\'\'");
                     EscapeAndQuoteTest("a", '\'', "\'a\'");
                     EscapeAndQuoteTest("\n", '\'', "\'\\n\'");
-                    EscapeAndQuoteTest("\"hello\"", '\'', "\'\\\"hello\\\"\'");
+                    EscapeAndQuoteTest("\"hello\"", '\'', "\'\"hello\"\'");
                     EscapeAndQuoteTest(null, '\"', null);
                     EscapeAndQuoteTest("", '\"', "\"\"");
                     EscapeAndQuoteTest("a", '\"', "\"a\"");
@@ -175,7 +175,7 @@
                     EscapeAndQuoteTest("", "\'", "\'\'");
                     EscapeAndQuoteTest("a", "\'", "\'a\'");
                     EscapeAndQuoteTest("\n", "\'", "\'\\n\'");
-                    EscapeAndQuoteTest("\"hello\"", "\'", "\'\\\"hello\\\"\'");
+                    EscapeAndQuoteTest("\"hello\"", "\'", "\'\"hello\"\'");
                     EscapeAndQuoteTest(null, "\"", null);
                     EscapeAndQuoteTest("", "\"", "\"\"");
                     EscapeAndQuoteTest("a", "\"", "\"a\"");

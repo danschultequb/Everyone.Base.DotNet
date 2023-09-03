@@ -8,7 +8,7 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageId>Everyone.Base.DotNet.Tests</PackageId>
     <VersionPrefix>1.0.0</VersionPrefix>
-    <VersionSuffix>dev</VersionSuffix>
+    <VersionSuffix>dev002</VersionSuffix>
     <Title>Everone.Base.DotNet.Tests</Title>
     <Company>everyone</Company>
     <Authors>everyone</Authors>
@@ -18,7 +18,7 @@
     <IncludeSymbols>True</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <IsPublishable>False</IsPublishable>
-    <IsPackable>False</IsPackable>
+    <IsPackable>True</IsPackable>
     <IsTestProject>True</IsTestProject>
   </PropertyGroup>
 

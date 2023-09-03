@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 
 namespace Everyone
 {
@@ -173,5 +174,18 @@ namespace Everyone
         /// <param name="value">The value to that should've been not disposed.</param>
         /// <param name="parameters">The optional parameters for the error message.</param>
         public string ExpectedNotDisposed(Disposable value, AssertParameters? parameters);
+
+        /// <summary>
+        /// Get the message that explains that the provided <paramref name="value"/> should have
+        /// been one of the provided <paramref name="possibilities"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the <paramref name="value"/>.</typeparam>
+        /// <typeparam name="U">The type of the <paramref name="possibilities"/>.</typeparam>
+        /// <param name="value">The value that should have been one of the provided
+        /// <paramref name="possibilities"/>.</param>
+        /// <param name="possibilities">The possible values that the <paramref name="value"/>
+        /// should have been.</param>
+        /// <param name="parameters">The optional parameters for the error message.</param>
+        public string ExpectedOneOf<T, U>(T value, IEnumerable<U> possibilities, AssertParameters? parameters);
     }
 }

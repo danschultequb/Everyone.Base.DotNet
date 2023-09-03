@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace Everyone
 {
@@ -160,7 +161,7 @@ namespace Everyone
         {
             return this.Expected(
                 expected: "disposed",
-                actual: "not disposed",
+                actual:   "not disposed",
                 parameters: parameters);
         }
 
@@ -168,7 +169,15 @@ namespace Everyone
         {
             return this.Expected(
                 expected: "not disposed",
-                actual: "disposed",
+                actual:   "disposed",
+                parameters: parameters);
+        }
+
+        public string ExpectedOneOf<T, U>(T value, IEnumerable<U> possibilities, AssertParameters? parameters)
+        {
+            return this.Expected(
+                expected: $"one of {this.ToString(possibilities)}",
+                actual:   $"{this.ToString(value)}",
                 parameters: parameters);
         }
     }

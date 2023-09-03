@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Everyone
@@ -421,6 +423,50 @@ namespace Everyone
                             "Message: hello there!",
                             "Expected: not 1",
                             "Actual:   2"));
+                });
+
+                runner.TestMethod("ExpectedOneOf<T,U>(T,IEnumerable<U>,AssertParameters?)", () =>
+                {
+                    void ExpectedOneOfTest<T,U>(T value, IEnumerable<U> possibilities, AssertParameters? parameters, string? expected = null, Exception? expectedException = null)
+                    {
+                        runner.Test($"with {Language.AndList(new object?[] { value, possibilities }.Map(runner.ToString))}", (Test test) =>
+                        {
+                            BasicAssertMessageFunctions messageFunctions = BasicAssertMessageFunctions.Create();
+                            test.AssertThrows(expectedException, () =>
+                            {
+                                test.AssertEqual(expected, messageFunctions.ExpectedOneOf(value, possibilities, parameters));
+                            });
+                        });
+                    }
+
+                    ExpectedOneOfTest(
+                        value: 5,
+                        possibilities: new[] { 1, 2, 3 },
+                        parameters: null,
+                        expected: string.Join(Environment.NewLine,
+                            "Expected: one of [1,2,3]",
+                            "Actual:   5"));
+                    ExpectedOneOfTest(
+                        value: 5,
+                        possibilities: (string[])null!,
+                        parameters: null,
+                        expected: string.Join(Environment.NewLine,
+                            "Expected: one of null",
+                            "Actual:   5"));
+                    ExpectedOneOfTest(
+                        value: 'a',
+                        possibilities: new[] { 'b', 'c' },
+                        parameters: null,
+                        expected: string.Join(Environment.NewLine,
+                            "Expected: one of ['b','c']",
+                            "Actual:   'a'"));
+                    ExpectedOneOfTest(
+                        value: '\n',
+                        possibilities: new[] { '\'', '\"' },
+                        parameters: null,
+                        expected: string.Join(Environment.NewLine,
+                            "Expected: one of ['\\'','\"']",
+                            "Actual:   '\\n'"));
                 });
             });
         }

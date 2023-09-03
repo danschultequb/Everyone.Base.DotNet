@@ -15,7 +15,7 @@ namespace Everyone
         /// Escape the provided <see cref="string"/> so that all escape sequences are revealed.
         /// </summary>
         /// <param name="value">The <see cref="string"/> to escape.</param>
-        public static string? Escape(this string? value)
+        public static string? Escape(this string? value, IEnumerable<char>? dontEscape = null)
         {
             string? result = value;
 
@@ -24,7 +24,7 @@ namespace Everyone
                 StringBuilder builder = new StringBuilder();
                 foreach (char c in value)
                 {
-                    builder.Append(Characters.Escape(c));
+                    builder.Append(Characters.Escape(c, dontEscape));
                 }
                 result = (builder.Length == value.Length ? value : builder.ToString());
             }
@@ -68,9 +68,9 @@ namespace Everyone
         /// <param name="value">The value to quote.</param>
         /// <param name="quote">The quote to use.</param>
         /// <returns></returns>
-        public static string? EscapeAndQuote(this string? value)
+        public static string? EscapeAndQuote(this string? value, IEnumerable<char>? dontEscape = null)
         {
-            return Strings.EscapeAndQuote(value, Strings.defaultQuote);
+            return Strings.EscapeAndQuote(value, Strings.defaultQuote, dontEscape);
         }
 
         /// <summary>
@@ -79,9 +79,9 @@ namespace Everyone
         /// <param name="value">The value to quote.</param>
         /// <param name="quote">The quote to use.</param>
         /// <returns></returns>
-        public static string? EscapeAndQuote(this string? value, char quote)
+        public static string? EscapeAndQuote(this string? value, char quote, IEnumerable<char>? dontEscape = null)
         {
-            return Strings.EscapeAndQuote(value, quote.ToString());
+            return Strings.EscapeAndQuote(value, quote.ToString(), dontEscape);
         }
 
         /// <summary>
@@ -90,9 +90,23 @@ namespace Everyone
         /// <param name="value">The value to quote.</param>
         /// <param name="quote">The quote to use.</param>
         /// <returns></returns>
-        public static string? EscapeAndQuote(this string? value, string quote)
+        public static string? EscapeAndQuote(this string? value, string quote, IEnumerable<char>? dontEscape = null)
         {
-            return Strings.Quote(Strings.Escape(value), quote);
+            if (dontEscape == null)
+            {
+                if (quote == "\'")
+                {
+                    dontEscape = new[] { '"' };
+                }
+                else if (quote == "\"")
+                {
+                    dontEscape = new[] { '\'' };
+                }
+            }
+
+            string? result = Strings.Escape(value, dontEscape);
+            result = Strings.Quote(result, quote);
+            return result;
         }
 
         public static string Join(this IEnumerable<string?> values, char separator)

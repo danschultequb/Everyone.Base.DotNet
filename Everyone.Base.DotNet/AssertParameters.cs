@@ -38,7 +38,7 @@ namespace Everyone
                 {
                     builder.Append(',');
                 }
-                builder.Append(new[] { propertyName, propertyValue }.Map(Strings.EscapeAndQuote).Join(':'));
+                builder.Append(new[] { propertyName, propertyValue }.Map((string value) => Strings.EscapeAndQuote(value)).Join(':'));
             }
         }
 

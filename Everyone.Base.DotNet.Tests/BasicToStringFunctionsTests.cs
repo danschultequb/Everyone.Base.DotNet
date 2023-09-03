@@ -100,7 +100,7 @@ namespace Everyone
                     }
 
                     ExceptionToStringTest(null, "null");
-                    ExceptionToStringTest(new Exception(), "System.Exception: \"Exception of type \\'System.Exception\\' was thrown.\"");
+                    ExceptionToStringTest(new Exception(), "System.Exception: \"Exception of type 'System.Exception' was thrown.\"");
                     ExceptionToStringTest(new Exception("abc"), "System.Exception: \"abc\"");
                     ExceptionToStringTest(new ArgumentException("a"), "System.ArgumentException: \"a\"");
                 });
@@ -125,9 +125,13 @@ namespace Everyone
                     ToStringTest('\t', "'\\t'");
                     ToStringTest('\n', "'\\n'");
                     ToStringTest('\v', "'\\v'");
+                    ToStringTest('\'', "'\\''");
+                    ToStringTest('\"', "'\"'");
 
                     ToStringTest<string>(null, "null");
                     ToStringTest("", "\"\"");
+                    ToStringTest("'", "\"'\"");
+                    ToStringTest("\"", "\"\\\"\"");
                     ToStringTest("abc", "\"abc\"");
                     ToStringTest("a\r\nb", "\"a\\r\\nb\"");
 
@@ -143,7 +147,7 @@ namespace Everyone
                     ToStringTest(Tuple.Create("1", 2, 'c'), "(\"1\",2,'c')");
 
                     ToStringTest<Exception>(null, "null");
-                    ToStringTest(new Exception(), "System.Exception: \"Exception of type \\'System.Exception\\' was thrown.\"");
+                    ToStringTest(new Exception(), "System.Exception: \"Exception of type 'System.Exception' was thrown.\"");
                     ToStringTest(new Exception("abc"), "System.Exception: \"abc\"");
                     ToStringTest(new ArgumentException("a"), "System.ArgumentException: \"a\"");
                 });
