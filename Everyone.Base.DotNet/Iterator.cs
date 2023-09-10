@@ -41,13 +41,19 @@
         /// Get this <see cref="Iterator{T}"/>'s current value and advance to the next value.
         /// </summary>
         public T TakeCurrent();
+
+        /// <summary>
+        /// Ensure that this <see cref="Iterator{T}"/> has started.
+        /// </summary>
+        /// <returns>This object for method chaining.</returns>
+        public Iterator<T> Start();
     }
 
     /// <summary>
     /// A base implementation of the <see cref="Iterator{T}"/> interface.
     /// </summary>
     /// <typeparam name="T">The type of values returned by this <see cref="Iterator{T}"/>.</typeparam>
-    public abstract class IteratorBase<T> : Iterator<T>
+    public abstract class IteratorBase<T,TIterator> : Iterator<T> where TIterator : class, Iterator<T>
     {
         public abstract T Current { get; }
 
@@ -92,6 +98,20 @@
         {
             return this;
         }
+
+        Iterator<T> Iterator<T>.Start()
+        {
+            return this.Start();
+        }
+
+        public virtual TIterator Start()
+        {
+            if (!this.HasStarted())
+            {
+                this.Next();
+            }
+            return (this as TIterator)!;
+        }
     }
 
     /// <summary>
@@ -99,7 +119,7 @@
     /// <see cref="Iterator{T}"/>s.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class IteratorDecorator<T> : IteratorBase<T>
+    public class IteratorDecorator<T,TIterator> : IteratorBase<T,TIterator> where TIterator : class, Iterator<T>
     {
         protected readonly Iterator<T> innerDecorator;
 

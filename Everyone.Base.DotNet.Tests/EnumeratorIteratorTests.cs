@@ -207,6 +207,74 @@ namespace Everyone
                         test.AssertTrue(iterator.HasStarted());
                     });
                 });
+
+                runner.TestMethod("Start()", () =>
+                {
+                    runner.Test($"with empty non-started {nameof(EnumeratorIterator)}", (Test test) =>
+                    {
+                        EnumeratorIterator<int> iterator = CreateIterator<int>();
+
+                        EnumeratorIterator<int> startResult = iterator.Start();
+                        test.AssertSame(iterator, startResult);
+                        test.AssertFalse(iterator.HasCurrent());
+                        test.AssertTrue(iterator.HasStarted());
+                    });
+
+                    runner.Test($"with empty started {nameof(EnumeratorIterator)}", (Test test) =>
+                    {
+                        EnumeratorIterator<int> iterator = CreateIterator<int>();
+                        test.AssertFalse(iterator.Next());
+
+                        EnumeratorIterator<int> startResult = iterator.Start();
+                        test.AssertSame(iterator, startResult);
+                        test.AssertFalse(iterator.HasCurrent());
+                        test.AssertTrue(iterator.HasStarted());
+                    });
+
+                    runner.Test($"with one-value non-started {nameof(EnumeratorIterator)}", (Test test) =>
+                    {
+                        EnumeratorIterator<int> iterator = CreateIterator(5);
+                        EnumeratorIterator<int> startResult = iterator.Start();
+                        test.AssertSame(iterator, startResult);
+                        test.AssertTrue(iterator.HasCurrent());
+                        test.AssertEqual(5, iterator.Current);
+                        test.AssertTrue(iterator.HasStarted());
+                    });
+
+                    runner.Test($"with one-value started {nameof(EnumeratorIterator)}", (Test test) =>
+                    {
+                        EnumeratorIterator<int> iterator = CreateIterator(5);
+                        test.AssertTrue(iterator.Next());
+
+                        EnumeratorIterator<int> startResult = iterator.Start();
+                        test.AssertSame(iterator, startResult);
+                        test.AssertTrue(iterator.HasCurrent());
+                        test.AssertEqual(5, iterator.Current);
+                        test.AssertTrue(iterator.HasStarted());
+                    });
+
+                    runner.Test($"with two-value non-started {nameof(EnumeratorIterator)}", (Test test) =>
+                    {
+                        EnumeratorIterator<int> iterator = CreateIterator(5, 6);
+                        EnumeratorIterator<int> startResult = iterator.Start();
+                        test.AssertSame(iterator, startResult);
+                        test.AssertTrue(iterator.HasCurrent());
+                        test.AssertEqual(5, iterator.Current);
+                        test.AssertTrue(iterator.HasStarted());
+                    });
+
+                    runner.Test($"with two-value started {nameof(EnumeratorIterator)}", (Test test) =>
+                    {
+                        EnumeratorIterator<int> iterator = CreateIterator(5, 6);
+                        test.AssertTrue(iterator.Next());
+
+                        EnumeratorIterator<int> startResult = iterator.Start();
+                        test.AssertSame(iterator, startResult);
+                        test.AssertTrue(iterator.HasCurrent());
+                        test.AssertEqual(5, iterator.Current);
+                        test.AssertTrue(iterator.HasStarted());
+                    });
+                });
             });
         }
 

@@ -10,7 +10,7 @@ namespace Everyone
         }
     }
 
-    public class EnumeratorIterator<T> : IteratorBase<T>
+    public class EnumeratorIterator<T> : IteratorBase<T, EnumeratorIterator<T>>
     {
         private readonly IEnumerator<T> enumerator;
         private bool disposed;
