@@ -121,42 +121,42 @@
     /// <typeparam name="T"></typeparam>
     public class IteratorDecorator<T,TIterator> : IteratorBase<T,TIterator> where TIterator : class, Iterator<T>
     {
-        protected readonly Iterator<T> innerDecorator;
+        private readonly Iterator<T> innerIterator;
 
-        protected IteratorDecorator(Iterator<T> innerDecorator)
+        protected IteratorDecorator(Iterator<T> innerIterator)
         {
-            Pre.Condition.AssertNotNull(innerDecorator, nameof(innerDecorator));
+            Pre.Condition.AssertNotNull(innerIterator, nameof(innerIterator));
 
-            this.innerDecorator = innerDecorator;
+            this.innerIterator = innerIterator;
         }
 
-        public override T Current => this.innerDecorator.Current;
+        public override T Current => this.innerIterator.Current;
 
-        public override bool Disposed => this.innerDecorator.Disposed;
+        public override bool Disposed => this.innerIterator.Disposed;
 
         public override bool Dispose()
         {
-            return this.innerDecorator.Dispose();
+            return this.innerIterator.Dispose();
         }
 
         public override bool HasCurrent()
         {
-            return this.innerDecorator.HasCurrent();
+            return this.innerIterator.HasCurrent();
         }
 
         public override bool HasStarted()
         {
-            return this.innerDecorator.HasStarted();
+            return this.innerIterator.HasStarted();
         }
 
         public override bool Next()
         {
-            return this.innerDecorator.Next();
+            return this.innerIterator.Next();
         }
 
         public override T TakeCurrent()
         {
-            return this.innerDecorator.TakeCurrent();
+            return this.innerIterator.TakeCurrent();
         }
     }
 }

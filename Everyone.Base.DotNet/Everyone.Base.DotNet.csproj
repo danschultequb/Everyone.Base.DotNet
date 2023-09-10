@@ -8,7 +8,7 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageId>Everyone.Base.DotNet</PackageId>
     <VersionPrefix>1.0.0</VersionPrefix>
-    <VersionSuffix>dev021</VersionSuffix>
+    <VersionSuffix>dev022</VersionSuffix>
     <Title>Everyone.Base.DotNet</Title>
     <Company>everyone</Company>
     <Authors>everyone</Authors>
