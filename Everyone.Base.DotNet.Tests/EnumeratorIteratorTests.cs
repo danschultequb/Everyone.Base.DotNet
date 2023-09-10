@@ -132,6 +132,81 @@ namespace Everyone
                     }
                     test.AssertEqual(new[] { 1, 2, 3 }, values);
                 });
+
+                runner.TestMethod("TakeCurrent()", () =>
+                {
+                    runner.Test($"with empty non-started {nameof(EnumeratorIterator)}", (Test test) =>
+                    {
+                        EnumeratorIterator<int> iterator = CreateIterator<int>();
+                        test.AssertThrows(() => iterator.TakeCurrent(),
+                            new PreConditionFailure(
+                                "Expression: this.HasCurrent()",
+                                "Expected: True",
+                                "Actual:   False"));
+                        test.AssertFalse(iterator.HasCurrent());
+                        test.AssertFalse(iterator.HasStarted());
+                    });
+
+                    runner.Test($"with empty started {nameof(EnumeratorIterator)}", (Test test) =>
+                    {
+                        EnumeratorIterator<int> iterator = CreateIterator<int>();
+                        test.AssertFalse(iterator.Next());
+                        test.AssertThrows(() => iterator.TakeCurrent(),
+                            new PreConditionFailure(
+                                "Expression: this.HasCurrent()",
+                                "Expected: True",
+                                "Actual:   False"));
+                        test.AssertFalse(iterator.HasCurrent());
+                        test.AssertTrue(iterator.HasStarted());
+                    });
+
+                    runner.Test($"with one-value non-started {nameof(EnumeratorIterator)}", (Test test) =>
+                    {
+                        EnumeratorIterator<int> iterator = CreateIterator(5);
+                        test.AssertThrows(() => iterator.TakeCurrent(),
+                            new PreConditionFailure(
+                                "Expression: this.HasCurrent()",
+                                "Expected: True",
+                                "Actual:   False"));
+                        test.AssertFalse(iterator.HasCurrent());
+                        test.AssertFalse(iterator.HasStarted());
+                    });
+
+                    runner.Test($"with one-value started {nameof(EnumeratorIterator)}", (Test test) =>
+                    {
+                        EnumeratorIterator<int> iterator = CreateIterator(5);
+                        test.AssertTrue(iterator.Next());
+
+                        test.AssertEqual(5, iterator.TakeCurrent());
+
+                        test.AssertFalse(iterator.HasCurrent());
+                        test.AssertTrue(iterator.HasStarted());
+                    });
+
+                    runner.Test($"with two-value non-started {nameof(EnumeratorIterator)}", (Test test) =>
+                    {
+                        EnumeratorIterator<int> iterator = CreateIterator(5, 6);
+                        test.AssertThrows(() => iterator.TakeCurrent(),
+                            new PreConditionFailure(
+                                "Expression: this.HasCurrent()",
+                                "Expected: True",
+                                "Actual:   False"));
+                        test.AssertFalse(iterator.HasCurrent());
+                        test.AssertFalse(iterator.HasStarted());
+                    });
+
+                    runner.Test($"with two-value started {nameof(EnumeratorIterator)}", (Test test) =>
+                    {
+                        EnumeratorIterator<int> iterator = CreateIterator(5, 6);
+                        test.AssertTrue(iterator.Next());
+
+                        test.AssertEqual(5, iterator.TakeCurrent());
+                        test.AssertEqual(6, iterator.TakeCurrent());
+
+                        test.AssertFalse(iterator.HasCurrent());
+                        test.AssertTrue(iterator.HasStarted());
+                    });
+                });
             });
         }
 

@@ -36,6 +36,11 @@
         /// Move this <see cref="Iterator{T}"/> to its next value.
         /// </summary>
         public bool Next();
+
+        /// <summary>
+        /// Get this <see cref="Iterator{T}"/>'s current value and advance to the next value.
+        /// </summary>
+        public T TakeCurrent();
     }
 
     /// <summary>
@@ -71,6 +76,16 @@
         public void Reset()
         {
             throw new System.NotSupportedException();
+        }
+
+        public virtual T TakeCurrent()
+        {
+            Pre.Condition.AssertTrue(this.HasCurrent(), "this.HasCurrent()");
+
+            T result = this.Current;
+            this.Next();
+
+            return result;
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
@@ -117,6 +132,11 @@
         public override bool Next()
         {
             return this.innerDecorator.Next();
+        }
+
+        public override T TakeCurrent()
+        {
+            return this.innerDecorator.TakeCurrent();
         }
     }
 }

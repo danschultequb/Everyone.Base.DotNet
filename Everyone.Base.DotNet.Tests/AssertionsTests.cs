@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Everyone
 {
-    public static class ConditionTests
+    public static class AssertionsTests
     {
         public static Assertions CreateCondition()
         {
@@ -56,7 +56,7 @@ namespace Everyone
                     {
                         runner.Test($"with {runner.ToString(message)}", (Test test) =>
                         {
-                            Assertions condition = ConditionTests.CreateCondition();
+                            Assertions condition = AssertionsTests.CreateCondition();
                             test.AssertThrows(expectedException, () => condition.Fail(message));
                         });
                     }
@@ -78,7 +78,7 @@ namespace Everyone
                     {
                         runner.Test($"with {Language.AndList(new object?[] { value, expression, message }.Select(runner.ToString))}", (Test test) =>
                         {
-                            Assertions condition = ConditionTests.CreateCondition();
+                            Assertions condition = AssertionsTests.CreateCondition();
                             
                             test.AssertThrows(expectedException, () =>
                             {
@@ -156,7 +156,7 @@ namespace Everyone
                     {
                         runner.Test($"with {Language.AndList(runner.ToString(value), parameters)}", (Test test) =>
                         {
-                            Assertions condition = ConditionTests.CreateCondition();
+                            Assertions condition = AssertionsTests.CreateCondition();
                             test.AssertThrows(expectedException, () =>
                             {
                                 condition.AssertTrue(
@@ -180,7 +180,7 @@ namespace Everyone
                     {
                         runner.Test($"with {Language.AndList(new object?[] { value, expression, message }.Select(runner.ToString))}", (Test test) =>
                         {
-                            Assertions condition = ConditionTests.CreateCondition();
+                            Assertions condition = AssertionsTests.CreateCondition();
                             test.AssertThrows(expectedException, () =>
                             {
                                 condition.AssertFalse(
@@ -257,7 +257,7 @@ namespace Everyone
                     {
                         runner.Test($"with {Language.AndList(runner.ToString(value), parameters)}", (Test test) =>
                         {
-                            Assertions condition = ConditionTests.CreateCondition();
+                            Assertions condition = AssertionsTests.CreateCondition();
                             test.AssertThrows(expectedException, () =>
                             {
                                 condition.AssertFalse(
@@ -281,7 +281,7 @@ namespace Everyone
                     {
                         runner.Test($"with {Language.AndList(new object?[] { value, expression, message }.Select(runner.ToString))}", (Test test) =>
                         {
-                            Assertions condition = ConditionTests.CreateCondition();
+                            Assertions condition = AssertionsTests.CreateCondition();
                             test.AssertThrows(expectedException, () =>
                             {
                                 condition.AssertNull(value, expression, message);
