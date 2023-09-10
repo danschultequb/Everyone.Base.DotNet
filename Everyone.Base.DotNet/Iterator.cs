@@ -153,10 +153,5 @@
         {
             return this.innerIterator.Next();
         }
-
-        public override T TakeCurrent()
-        {
-            return this.innerIterator.TakeCurrent();
-        }
     }
 }
