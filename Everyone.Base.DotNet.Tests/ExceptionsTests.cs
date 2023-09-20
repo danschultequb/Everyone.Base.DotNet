@@ -35,7 +35,7 @@ namespace Everyone
                         expected: new PreConditionFailure("abc"));
                     UnwrapToTest<PreConditionFailure>(
                         value: new Exception("fake-message", new PreConditionFailure("abc")),
-                        expected: new PreConditionFailure("abc"));
+                        expected: null);
                     UnwrapToTest<PreConditionFailure>(
                         value: UncaughtExceptionError.Create(new PreConditionFailure("abc")),
                         expected: new PreConditionFailure("abc"));
@@ -83,7 +83,7 @@ namespace Everyone
                     UnwrapToTest(
                         targetType: typeof(PreConditionFailure),
                         value: new Exception("fake-message", new PreConditionFailure("abc")),
-                        expected: new PreConditionFailure("abc"));
+                        expected: null);
                     UnwrapToTest(
                         targetType: typeof(PreConditionFailure),
                         value: UncaughtExceptionError.Create(new PreConditionFailure("abc")),

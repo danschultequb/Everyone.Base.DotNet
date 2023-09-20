@@ -36,13 +36,21 @@ namespace Everyone
                 {
                     break;
                 }
-                else if (result is Exception resultException)
+                else if (result is AwaitException awaitException)
                 {
-                    result = resultException.InnerException;
+                    result = awaitException.InnerException;
+                }
+                if (result is AwaitErrorException awaitErrorException)
+                {
+                    result = awaitErrorException.Error;
                 }
                 else if (result is UncaughtExceptionError resultError)
                 {
                     result = resultError.UncaughtException;
+                }
+                else if (Types.InstanceOf(result, targetType))
+                {
+                    break;
                 }
                 else
                 {

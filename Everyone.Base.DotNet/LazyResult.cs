@@ -5,7 +5,7 @@ namespace Everyone
     public class LazyResult : Result
     {
         private readonly Action action;
-        private Exception? exception;
+        private Error? error;
         private bool completed;
 
         protected LazyResult(Action action)
@@ -37,13 +37,13 @@ namespace Everyone
                 }
                 catch (Exception e)
                 {
-                    this.exception = e;
+                    this.error = UncaughtExceptionError.Create(e);
                 }
             }
 
-            if (this.exception != null)
+            if (this.error != null)
             {
-                throw new AwaitException(this.exception);
+                throw new AwaitErrorException(this.error);
             }
         }
     }

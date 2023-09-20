@@ -2,6 +2,10 @@
 
 namespace Everyone
 {
+    /// <summary>
+    /// An <see cref="Exception"/> that is thrown when something throws an <see cref="Exception"/>
+    /// while it is being awaited.
+    /// </summary>
     public class AwaitException : Exception
     {
         public AwaitException(Exception innerException)
@@ -10,22 +14,9 @@ namespace Everyone
             Pre.Condition.AssertNotNull(innerException, nameof(innerException));
         }
 
-        public new Exception InnerException => base.InnerException!;
-
         /// <summary>
-        /// Get the <see cref="Exception"/> that is wrapped by this and any further
-        /// <see cref="AwaitException"/>s.
-        public Exception Unwrap()
-        {
-            Exception result = this;
-            while (result is AwaitException awaitException)
-            {
-                result = awaitException.InnerException;
-            }
-
-            Post.Condition.AssertNotNull(result, nameof(result));
-
-            return result;
-        }
+        /// The <see cref="Exception"/> that was thrown during the await.
+        /// </summary>
+        public new Exception InnerException => base.InnerException!;
     }
 }

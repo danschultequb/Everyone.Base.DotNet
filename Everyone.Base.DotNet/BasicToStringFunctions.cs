@@ -89,7 +89,25 @@ namespace Everyone
 
         public string ExceptionToString(Exception? exception)
         {
-            return exception == null ? "null" : $"{exception.GetType().FullName}: {Strings.EscapeAndQuote(exception.Message)}";
+            string result;
+            if (exception == null)
+            {
+                result = "null";
+            }
+            else
+            {
+                StringBuilder builder = new StringBuilder();
+                while (exception is AwaitErrorException ||
+                       exception is AwaitException)
+                {
+                    builder.Append($"{Types.GetFullName(exception)}: ");
+                    exception = exception.InnerException!;
+                }
+                builder.Append($"{Types.GetFullName(exception)}: {Strings.EscapeAndQuote(exception.Message)}");
+
+                result = builder.ToString();
+            }
+            return result;
         }
 
         public Disposable AddToStringFunction<T>(Func<T?, string> toStringFunction)

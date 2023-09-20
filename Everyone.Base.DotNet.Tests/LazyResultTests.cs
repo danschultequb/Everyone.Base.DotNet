@@ -49,7 +49,7 @@ namespace Everyone
                         for (int i = 0; i < 3; i++)
                         {
                             test.AssertThrows(() => result.Await(),
-                                new AwaitException(new InvalidOperationException("error message 1")));
+                                new AwaitErrorException(UncaughtExceptionError.Create(new InvalidOperationException("error message 1"))));
                             test.AssertEqual(1, counter);
                         }
                     });

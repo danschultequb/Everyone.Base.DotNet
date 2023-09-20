@@ -7,7 +7,8 @@
     public class AwaitErrorException : System.Exception
     {
         public AwaitErrorException(Error error)
-            : base(AwaitErrorException.GetErrorMessage(error))
+            : base(message: AwaitErrorException.GetErrorMessage(error),
+                   innerException: (error as UncaughtExceptionError)?.UncaughtException)
         {
             this.Error = error;
         }

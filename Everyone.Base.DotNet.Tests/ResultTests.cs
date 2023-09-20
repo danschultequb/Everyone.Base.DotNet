@@ -126,7 +126,7 @@ namespace Everyone
                         for (int i = 0; i < 3; i++)
                         {
                             test.AssertThrows(() => { result.Await(); },
-                                new AwaitException(new Exception("abc")));
+                                new AwaitErrorException(UncaughtExceptionError.Create(new Exception("abc"))));
                             test.AssertEqual(1, counter);
                         }
                     });

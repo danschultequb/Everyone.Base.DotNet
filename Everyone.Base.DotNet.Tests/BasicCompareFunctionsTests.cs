@@ -45,12 +45,12 @@ namespace Everyone
 
                 runner.TestMethod("ExceptionEqual(Exception?,Exception?)", () =>
                 {
-                    void ExceptionEqualTest(Exception? lhs, Exception? rhs, bool expected)
+                    void ExceptionEqualTest(Exception? expectedException, Exception? actualException, bool expected)
                     {
-                        runner.Test($"with {runner.ToString(lhs)} and {runner.ToString(rhs)}", (Test test) =>
+                        runner.Test($"with {Language.AndList(new[] { expectedException, actualException }.Map(runner.ToString))}", (Test test) =>
                         {
                             BasicCompareFunctions functions = BasicCompareFunctions.Create();
-                            test.AssertEqual(expected, functions.ExceptionEqual(lhs, rhs));
+                            test.AssertEqual(expected, functions.ExceptionEqual(expectedException, actualException));
                         });
                     }
 
@@ -83,6 +83,18 @@ namespace Everyone
                     ExceptionEqualTest(new AwaitException(new Exception("abc")), new AwaitException(new Exception()), false);
                     ExceptionEqualTest(new AwaitException(new Exception("abc")), new AwaitException(new Exception("abc")), true);
                     ExceptionEqualTest(new AwaitException(new Exception("abc")), new AwaitException(new IOException("abc")), false);
+
+                    ExceptionEqualTest(null, new AwaitException(new Exception("abc")), false);
+                    ExceptionEqualTest(new Exception("def"), new AwaitException(new Exception("abc")), false);
+                    ExceptionEqualTest(new Exception("abc"), new AwaitException(new Exception("abc")), false);
+                    ExceptionEqualTest(new IOException("abc"), new AwaitException(new Exception("abc")), false);
+                    ExceptionEqualTest(new IOException("abc"), new AwaitException(new IOException("abc")), false);
+
+                    ExceptionEqualTest(null, new Exception("fake-message", new Exception("abc")), false);
+                    ExceptionEqualTest(new Exception("def"), new Exception("fake-message", new Exception("abc")), false);
+                    ExceptionEqualTest(new Exception("abc"), new Exception("fake-message", new Exception("abc")), false);
+                    ExceptionEqualTest(new IOException("abc"), new Exception("fake-message", new Exception("abc")), false);
+                    ExceptionEqualTest(new IOException("abc"), new Exception("fake-message", new IOException("abc")), false);
                 });
 
                 runner.TestMethod("AddEqualFunction(Func<T?,U?,bool>)", () =>
