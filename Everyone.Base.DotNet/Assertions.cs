@@ -213,7 +213,7 @@ namespace Everyone
             return parameters?.AssertMessageFunctions ?? this.assertMessageFunctions;
         }
 
-        private CompareFunctions GetCompareFunctions(AssertParameters? parameters)
+        protected CompareFunctions GetCompareFunctions(AssertParameters? parameters)
         {
             return parameters?.CompareFunctions ?? this.compareFunctions;
         }
