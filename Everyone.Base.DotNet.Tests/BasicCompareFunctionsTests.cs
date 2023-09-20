@@ -76,6 +76,13 @@ namespace Everyone
                     ExceptionEqualTest(new IOException("a"), new Exception("b"), false);
                     ExceptionEqualTest(new IOException("a"), new IOException("a"), true);
                     ExceptionEqualTest(new IOException("a"), new IOException("b"), false);
+
+                    ExceptionEqualTest(new AwaitException(new Exception("abc")), null, false);
+                    ExceptionEqualTest(new AwaitException(new Exception("abc")), new Exception(), false);
+                    ExceptionEqualTest(new AwaitException(new Exception("abc")), new Exception("abc"), false);
+                    ExceptionEqualTest(new AwaitException(new Exception("abc")), new AwaitException(new Exception()), false);
+                    ExceptionEqualTest(new AwaitException(new Exception("abc")), new AwaitException(new Exception("abc")), true);
+                    ExceptionEqualTest(new AwaitException(new Exception("abc")), new AwaitException(new IOException("abc")), false);
                 });
 
                 runner.TestMethod("AddEqualFunction(Func<T?,U?,bool>)", () =>

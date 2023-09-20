@@ -557,8 +557,14 @@ namespace Everyone
 
         public bool ExceptionEqual(Exception? lhs, Exception? rhs)
         {
-            return lhs?.GetType() == rhs?.GetType() &&
-                   lhs?.Message == rhs?.Message;
+            bool result = (lhs == rhs);
+            if (!result)
+            {
+                result = lhs?.GetType() == rhs?.GetType() &&
+                         lhs?.Message == rhs?.Message &&
+                         this.ExceptionEqual(lhs?.InnerException, rhs?.InnerException);
+            }
+            return result;
         }
 
         private Func<T?, U?, bool> GetEqualFunction<T, U>(T? lhs, U? rhs)
