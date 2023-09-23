@@ -127,6 +127,8 @@ namespace Everyone
                         {
                             test.AssertThrows(() => { result.Await(); },
                                 new AwaitErrorException(UncaughtExceptionError.Create(new Exception("abc"))));
+                            test.AssertThrows(() => { result.Await(); },
+                                new Exception("abc"));
                             test.AssertEqual(1, counter);
                         }
                     });
@@ -172,6 +174,8 @@ namespace Everyone
                         {
                             test.AssertThrows(() => result.Await(),
                                 new AwaitException(new Exception("abc")));
+                            test.AssertThrows(() => result.Await(),
+                                new Exception("abc"));
                             test.AssertEqual(1, counter);
                         }
                     });

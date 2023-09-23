@@ -50,6 +50,8 @@ namespace Everyone
                         {
                             test.AssertThrows(() => result.Await(),
                                 new AwaitErrorException(UncaughtExceptionError.Create(new InvalidOperationException("error message 1"))));
+                            test.AssertThrows(() => result.Await(),
+                                new InvalidOperationException("error message 1"));
                             test.AssertEqual(1, counter);
                         }
                     });
@@ -97,6 +99,8 @@ namespace Everyone
                         {
                             test.AssertThrows(() => result.Await(),
                                 new AwaitException(new InvalidOperationException("error message 1")));
+                            test.AssertThrows(() => result.Await(),
+                                new InvalidOperationException("error message 1"));
                             test.AssertEqual(1, counter);
                         }
                     });
