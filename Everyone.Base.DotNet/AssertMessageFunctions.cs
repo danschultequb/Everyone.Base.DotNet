@@ -187,5 +187,16 @@ namespace Everyone
         /// should have been.</param>
         /// <param name="parameters">The optional parameters for the error message.</param>
         public string ExpectedOneOf<T, U>(T value, IEnumerable<U> possibilities, AssertParameters? parameters);
+
+        /// <summary>
+        /// Get the message that explains that the provided <paramref name="text"/> should have
+        /// contained the provided <paramref name="substring"/>.
+        /// </summary>
+        /// <param name="text">The text that should've contained the provided
+        /// <paramref name="substring"/>.</param>
+        /// <param name="substring">The substring that should've been contained by the provided
+        /// <paramref name="text"/>.</param>
+        /// <param name="parameters">The optional parameters for the error message.</param>
+        public string ExpectedContains(string text, string substring, AssertParameters? parameters);
     }
 }

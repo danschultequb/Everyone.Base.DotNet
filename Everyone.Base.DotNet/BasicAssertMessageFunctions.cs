@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 
 namespace Everyone
 {
@@ -38,6 +37,18 @@ namespace Everyone
             {
                 list.Add($"Expression: {expression}");
             }
+        }
+
+        private string Expected(string expected, AssertParameters? parameters)
+        {
+            List<string> resultList = new List<string>();
+
+            AddMessage(resultList, parameters?.Message);
+            AddExpression(resultList, parameters?.Expression);
+
+            resultList.Add($"Expected: {expected}");
+
+            return string.Join(parameters?.NewLine ?? Environment.NewLine, resultList);
         }
 
         private string Expected(string expected, string actual, AssertParameters? parameters)
@@ -178,6 +189,13 @@ namespace Everyone
             return this.Expected(
                 expected: $"one of {this.ToString(possibilities)}",
                 actual:   $"{this.ToString(value)}",
+                parameters: parameters);
+        }
+
+        public string ExpectedContains(string text, string substring, AssertParameters? parameters)
+        {
+            return this.Expected(
+                expected: $"{text.EscapeAndQuote()} to contain {substring.EscapeAndQuote()}.",
                 parameters: parameters);
         }
     }

@@ -101,6 +101,46 @@ namespace Everyone
                         value: UncaughtExceptionError.Create(new Exception("abc")),
                         expected: null);
                 });
+
+                runner.TestGroup("Exception StackTraces", () =>
+                {
+                    runner.Test("with non-thrown Exception", (Test test) =>
+                    {
+                        Exception e1 = new Exception();
+                        test.AssertNull(e1.StackTrace);
+                    });
+
+                    runner.Test("with thrown Exception", (Test test) =>
+                    {
+                        try
+                        {
+                            throw new Exception();
+                        }
+                        catch (Exception e)
+                        {
+                            test.AssertNotNull(e.StackTrace);
+                        }
+                    });
+
+                    runner.Test("with created and then thrown Exception", (Test test) =>
+                    {
+                        Exception e = new Exception();
+                        test.AssertNull(e.StackTrace);
+
+                        try
+                        {
+                            throw e;
+                        }
+                        catch (Exception caughtException)
+                        {
+                            test.AssertSame(e, caughtException);
+                            test.AssertNotNull(e.StackTrace);
+                            test.AssertContains(e.StackTrace, "ExceptionsTests.cs:line 132");
+                        }
+
+                        test.AssertNotNull(e.StackTrace);
+                    });
+                });
             });
         }
     }

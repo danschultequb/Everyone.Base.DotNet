@@ -468,6 +468,75 @@ namespace Everyone
                             "Expected: one of ['\\'','\"']",
                             "Actual:   '\\n'"));
                 });
+
+                runner.TestMethod("ExpectedContains(string,string,AssertParameters?)", () =>
+                {
+                    void ExpectedContainsTest(string text, string substring, AssertParameters? parameters, string expected)
+                    {
+                        runner.Test($"with {Language.AndList(text.EscapeAndQuote(), substring.EscapeAndQuote(), parameters)}", (Test test) =>
+                        {
+                            BasicAssertMessageFunctions functions = BasicAssertMessageFunctions.Create();
+                            test.AssertEqual(expected, functions.ExpectedContains(text, substring, parameters));
+                        });
+                    }
+
+                    ExpectedContainsTest(
+                        text: null!,
+                        substring: null!,
+                        parameters: null,
+                        expected: string.Join("\n",
+                            "Expected:  to contain ."));
+                    ExpectedContainsTest(
+                        text: null!,
+                        substring: "",
+                        parameters: null,
+                        expected: string.Join("\n",
+                            "Expected:  to contain \"\"."));
+                    ExpectedContainsTest(
+                        text: null!,
+                        substring: "abc",
+                        parameters: null,
+                        expected: string.Join("\n",
+                            "Expected:  to contain \"abc\"."));
+
+                    ExpectedContainsTest(
+                        text: "",
+                        substring: null!,
+                        parameters: null,
+                        expected: string.Join("\n",
+                            "Expected: \"\" to contain ."));
+                    ExpectedContainsTest(
+                        text: "",
+                        substring: "",
+                        parameters: null,
+                        expected: string.Join("\n",
+                            "Expected: \"\" to contain \"\"."));
+                    ExpectedContainsTest(
+                        text: "",
+                        substring: "abc",
+                        parameters: null,
+                        expected: string.Join("\n",
+                            "Expected: \"\" to contain \"abc\"."));
+
+                    ExpectedContainsTest(
+                        text: "abc",
+                        substring: null!,
+                        parameters: null,
+                        expected: string.Join("\n",
+                            "Expected: \"abc\" to contain ."));
+                    ExpectedContainsTest(
+                        text: "abc",
+                        substring: "",
+                        parameters: null,
+                        expected: string.Join("\n",
+                            "Expected: \"abc\" to contain \"\"."));
+                    ExpectedContainsTest(
+                        text: "abc",
+                        substring: "abc",
+                        parameters: null,
+                        expected: string.Join("\n",
+                            "Expected: \"abc\" to contain \"abc\"."));
+                });
             });
         }
     }

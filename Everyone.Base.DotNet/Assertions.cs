@@ -185,6 +185,29 @@ namespace Everyone
         /// assertion.</param>
         /// <returns>This object for method chaining.</returns>
         public Assertions AssertOneOf<T,U>(T value, IEnumerable<U> possibilities, AssertParameters? parameters);
+
+        /// <summary>
+        /// Assert that the provided <paramref name="text"/> contains the provided
+        /// <paramref name="substring"/>.
+        /// </summary>
+        /// <param name="text">The text to search in.</param>
+        /// <param name="substring">The substring to search for.</param>
+        /// <param name="expression">The name of the expression that produced the
+        /// <paramref name="value"/>.</param>
+        /// <param name="message">The error message to display if the assertion fails.</param>
+        /// <returns>This object for method chaining.</returns>
+        public Assertions AssertContains(string text, string substring, string? expression = null, string? message = null);
+
+        /// <summary>
+        /// Assert that the provided <paramref name="text"/> contains the provided
+        /// <paramref name="substring"/>.
+        /// </summary>
+        /// <param name="text">The text to search in.</param>
+        /// <param name="substring">The substring to search for.</param>
+        /// <param name="parameters">The <see cref="AssertParameters"/> to provide to the
+        /// assertion.</param>
+        /// <returns>This object for method chaining.</returns>
+        public Assertions AssertContains(string text, string substring, AssertParameters? parameters);
     }
 
     /// <summary>
@@ -975,6 +998,49 @@ namespace Everyone
                             parameters: parameters));
             }
             return this;
+        }
+
+        Assertions Assertions.AssertContains(string text, string substring, string? expression, string? message)
+        {
+            return this.AssertContains(
+                text: text,
+                substring: substring,
+                expression: expression,
+                message: message);
+        }
+
+        public TAssertions AssertContains(string text, string substring, string? expression = null, string? message = null)
+        {
+            return this.AssertContains(
+                text: text,
+                substring: substring,
+                parameters: new AssertParameters
+                {
+                    Expression = expression,
+                    Message = message,
+                });
+        }
+
+        Assertions Assertions.AssertContains(string text, string substring, Everyone.AssertParameters? parameters)
+        {
+            return this.AssertContains(
+                text: text,
+                substring: substring,
+                parameters: parameters);
+        }
+
+        public TAssertions AssertContains(string text, string substring, AssertParameters? parameters)
+        {
+            if (text?.Contains(substring) != true)
+            {
+                throw this.createExceptionFunction(
+                    this.GetAssertMessageFunctions(parameters)
+                        .ExpectedContains(
+                            text: text,
+                            substring: substring,
+                            parameters: parameters));
+            }
+            return (this as TAssertions)!;
         }
     }
 }
