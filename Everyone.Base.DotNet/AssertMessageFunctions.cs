@@ -197,6 +197,6 @@ namespace Everyone
         /// <param name="substring">The substring that should've been contained by the provided
         /// <paramref name="text"/>.</param>
         /// <param name="parameters">The optional parameters for the error message.</param>
-        public string ExpectedContains(string text, string substring, AssertParameters? parameters);
+        public string ExpectedContains(string? text, string substring, AssertParameters? parameters);
     }
 }

@@ -2,10 +2,10 @@
 
 namespace Everyone
 {
-    public class LazyResult : Result
+    public class LazyResult : ResultBase
     {
         private readonly Action action;
-        private Error? error;
+        private Exception? exception;
         private bool completed;
 
         protected LazyResult(Action action)
@@ -25,7 +25,7 @@ namespace Everyone
             return LazyResult<T>.Create(function);
         }
 
-        public virtual void Await()
+        public override void Await()
         {
             if (!this.completed)
             {
@@ -35,15 +35,15 @@ namespace Everyone
                 {
                     this.action.Invoke();
                 }
-                catch (Exception e)
+                catch (Exception exception)
                 {
-                    this.error = UncaughtExceptionError.Create(e);
+                    this.exception = exception;
                 }
             }
 
-            if (this.error != null)
+            if (this.exception != null)
             {
-                throw new AwaitErrorException(this.error);
+                throw new AwaitException(this.exception);
             }
         }
     }
@@ -77,9 +77,9 @@ namespace Everyone
                 {
                     this.value = this.function.Invoke();
                 }
-                catch (Exception e)
+                catch (Exception exception)
                 {
-                    this.exception = e;
+                    this.exception = exception;
                 }
             }
 

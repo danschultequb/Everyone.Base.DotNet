@@ -1,31 +1,38 @@
-﻿namespace Everyone
+﻿using System;
+
+namespace Everyone
 {
     public class BasicResult : ResultBase
     {
-        private readonly Error? error;
+        private readonly Exception? exception;
 
-        protected BasicResult(Error? error)
+        protected BasicResult(Exception? exception)
         {
-            this.error = error;
+            this.exception = exception;
         }
 
         public static BasicResult Create()
         {
-            return new BasicResult(error: null);
+            return new BasicResult(exception: null);
         }
 
-        public static BasicResult Create(Error error)
+        public static BasicResult Create(Exception exception)
         {
-            Pre.Condition.AssertNotNull(error, nameof(error));
+            Pre.Condition.AssertNotNull(exception, nameof(exception));
 
-            return new BasicResult(error);
+            return new BasicResult(exception);
         }
 
-        public static BasicResult<T> Create<T>(Error error)
+        public static BasicResult<T> Create<T>()
         {
-            Pre.Condition.AssertNotNull(error, nameof(error));
+            return BasicResult<T>.Create(exception: null);
+        }
 
-            return BasicResult<T>.Create(error);
+        public static BasicResult<T> Create<T>(Exception exception)
+        {
+            Pre.Condition.AssertNotNull(exception, nameof(exception));
+
+            return BasicResult<T>.Create(exception);
         }
 
         public static BasicResult<T> Create<T>(T value)
@@ -35,9 +42,9 @@
 
         public override void Await()
         {
-            if (this.error != null)
+            if (this.exception != null)
             {
-                throw new AwaitErrorException(this.error);
+                throw new AwaitException(this.exception);
             }
         }
     }
@@ -45,29 +52,29 @@
     public class BasicResult<T> : ResultBase<T>
     {
         private readonly T? value;
-        private readonly Error? error;
+        private readonly Exception? exception;
 
-        protected BasicResult(T? value, Error? error)
+        protected BasicResult(T? value, Exception? exception)
         {
             this.value = value;
-            this.error = error;
+            this.exception = exception;
         }
 
-        public static BasicResult<T> Create(Error? error)
+        public static BasicResult<T> Create(Exception? exception)
         {
-            return new BasicResult<T>(value: default, error: error);
+            return new BasicResult<T>(value: default, exception: exception);
         }
 
         public static BasicResult<T> Create(T value)
         {
-            return new BasicResult<T>(value: value, error: null);
+            return new BasicResult<T>(value: value, exception: null);
         }
 
         public override T Await()
         {
-            if (this.error != null)
+            if (this.exception != null)
             {
-                throw new AwaitErrorException(this.error);
+                throw new AwaitException(this.exception);
             }
             return this.value!;
         }

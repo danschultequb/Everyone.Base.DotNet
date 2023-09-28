@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace Everyone
 {
@@ -8,25 +9,25 @@ namespace Everyone
         {
             runner.TestType(typeof(Exceptions), () =>
             {
-                runner.TestMethod("UnwrapTo<T>(object?)", () =>
+                runner.TestMethod("UnwrapTo<T>(Exception)", () =>
                 {
-                    void UnwrapToTest<T>(object? value, T? expected)
+                    runner.Test("with null", (Test test) =>
                     {
-                        runner.Test($"with {Language.AndList(new object?[] { typeof(T), value }.Map(runner.ToString))}", (Test test) =>
+                        test.AssertThrows(() => Exceptions.UnwrapTo<IOException>(null!),
+                            new PreConditionFailure(
+                                "Expression: value",
+                                "Expected: not null",
+                                "Actual:   null"));
+                    });
+
+                    void UnwrapToTest<T>(Exception value, T? expected) where T : Exception
+                    {
+                        runner.Test($"with {Language.AndList(new object?[] { value, typeof(T) }.Map(runner.ToString))}", (Test test) =>
                         {
-                            test.AssertEqual(expected, Exceptions.UnwrapTo<T>(value));
+                            test.AssertEqual(expected, Exceptions.UnwrapTo<T>(value!));
                         });
                     }
 
-                    UnwrapToTest<PreConditionFailure>(
-                        value: null,
-                        expected: null);
-                    UnwrapToTest<PreConditionFailure>(
-                        value: "hello",
-                        expected: null);
-                    UnwrapToTest<PreConditionFailure>(
-                        value: new[] { new PreConditionFailure("abc") },
-                        expected: null);
                     UnwrapToTest<PreConditionFailure>(
                         value: new PreConditionFailure("abc"),
                         expected: new PreConditionFailure("abc"));
@@ -37,68 +38,51 @@ namespace Everyone
                         value: new Exception("fake-message", new PreConditionFailure("abc")),
                         expected: null);
                     UnwrapToTest<PreConditionFailure>(
-                        value: UncaughtExceptionError.Create(new PreConditionFailure("abc")),
-                        expected: new PreConditionFailure("abc"));
-                    UnwrapToTest<PreConditionFailure>(
                         value: new Exception("abc"),
                         expected: null);
                     UnwrapToTest<PreConditionFailure>(
                         value: new AwaitException(new Exception("abc")),
-                        expected: null);
-                    UnwrapToTest<PreConditionFailure>(
-                        value: UncaughtExceptionError.Create(new Exception("abc")),
                         expected: null);
                 });
 
-                runner.TestMethod("UnwrapTo(Type,object?)", () =>
+                runner.TestMethod("UnwrapTo(Exception,Type)", () =>
                 {
-                    void UnwrapToTest(Type targetType, object? value, object? expected)
+                    runner.Test("with null", (Test test) =>
                     {
-                        runner.Test($"with {Language.AndList(new object?[] { targetType, value }.Map(runner.ToString))}", (Test test) =>
+                        test.AssertThrows(() => Exceptions.UnwrapTo(null!, typeof(IOException)),
+                            new PreConditionFailure(
+                                "Expression: value",
+                                "Expected: not null",
+                                "Actual:   null"));
+                    });
+
+                    void UnwrapToTest(Exception value, Type targetType, Exception? expected)
+                    {
+                        runner.Test($"with {Language.AndList(new object?[] { value, targetType }.Map(runner.ToString))}", (Test test) =>
                         {
-                            test.AssertEqual(expected, Exceptions.UnwrapTo(targetType, value));
+                            test.AssertEqual(expected, Exceptions.UnwrapTo(value, targetType));
                         });
                     }
 
                     UnwrapToTest(
-                        targetType: typeof(PreConditionFailure),
-                        value: null,
-                        expected: null);
-                    UnwrapToTest(
-                        targetType: typeof(PreConditionFailure),
-                        value: "hello",
-                        expected: null);
-                    UnwrapToTest(
-                        targetType: typeof(PreConditionFailure),
-                        value: new[] { new PreConditionFailure("abc") },
-                        expected: null);
-                    UnwrapToTest(
-                        targetType: typeof(PreConditionFailure),
                         value: new PreConditionFailure("abc"),
+                        targetType: typeof(PreConditionFailure),
                         expected: new PreConditionFailure("abc"));
                     UnwrapToTest(
-                        targetType: typeof(PreConditionFailure),
                         value: new AwaitException(new PreConditionFailure("abc")),
+                        targetType: typeof(PreConditionFailure),
                         expected: new PreConditionFailure("abc"));
                     UnwrapToTest(
-                        targetType: typeof(PreConditionFailure),
                         value: new Exception("fake-message", new PreConditionFailure("abc")),
+                        targetType: typeof(PreConditionFailure),
                         expected: null);
                     UnwrapToTest(
-                        targetType: typeof(PreConditionFailure),
-                        value: UncaughtExceptionError.Create(new PreConditionFailure("abc")),
-                        expected: new PreConditionFailure("abc"));
-                    UnwrapToTest(
-                        targetType: typeof(PreConditionFailure),
                         value: new Exception("abc"),
+                        targetType: typeof(PreConditionFailure),
                         expected: null);
                     UnwrapToTest(
-                        targetType: typeof(PreConditionFailure),
                         value: new AwaitException(new Exception("abc")),
-                        expected: null);
-                    UnwrapToTest(
                         targetType: typeof(PreConditionFailure),
-                        value: UncaughtExceptionError.Create(new Exception("abc")),
                         expected: null);
                 });
 
@@ -135,7 +119,7 @@ namespace Everyone
                         {
                             test.AssertSame(e, caughtException);
                             test.AssertNotNull(e.StackTrace);
-                            test.AssertContains(e.StackTrace, "ExceptionsTests.cs:line 132");
+                            test.AssertContains(e.StackTrace, "ExceptionsTests.cs:line 116");
                         }
 
                         test.AssertNotNull(e.StackTrace);

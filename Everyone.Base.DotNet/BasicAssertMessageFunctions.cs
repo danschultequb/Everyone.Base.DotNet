@@ -192,10 +192,10 @@ namespace Everyone
                 parameters: parameters);
         }
 
-        public string ExpectedContains(string text, string substring, AssertParameters? parameters)
+        public string ExpectedContains(string? text, string substring, AssertParameters? parameters)
         {
             return this.Expected(
-                expected: $"{text.EscapeAndQuote()} to contain {substring.EscapeAndQuote()}.",
+                expected: $"{text?.EscapeAndQuote()} to contain {substring.EscapeAndQuote()}.",
                 parameters: parameters);
         }
     }

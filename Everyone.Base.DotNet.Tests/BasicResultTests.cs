@@ -12,33 +12,41 @@ namespace Everyone
                 {
                     BasicResult result = BasicResult.Create();
                     test.AssertNotNull(result);
+
                     result.Await();
                 });
 
-                runner.TestMethod("Create(Error)", () =>
+                runner.TestMethod("Create(Exception)", () =>
                 {
-                    void CreateTest(Error error, Exception expectedException)
+                    runner.Test("with null", (Test test) =>
                     {
-                        runner.Test($"with {runner.ToString(error)}", (Test test) =>
+                        test.AssertThrows(() => BasicResult.Create(exception: null!),
+                            new PreConditionFailure(
+                                "Expression: exception",
+                                "Expected: not null",
+                                "Actual:   null"));
+                    });
+
+                    void CreateTest(Exception exception, Exception expectedException)
+                    {
+                        runner.Test($"with {runner.ToString(exception)}", (Test test) =>
                         {
-                            test.AssertThrows(expectedException, () =>
+                            BasicResult result = BasicResult.Create(exception: exception);
+                            test.AssertNotNull(result);
+
+                            for (int i = 0; i < 2; i++)
                             {
-                                BasicResult result = BasicResult.Create(error: error);
-                                test.AssertNotNull(result);
-                                result.Await();
-                            });
+                                test.AssertThrows(exception, () => result.Await());
+                            }
                         });
                     }
 
                     CreateTest(
-                        error: null!,
-                        expectedException: new PreConditionFailure(
-                            "Expression: error",
-                            "Expected: not null",
-                            "Actual:   null"));
+                        exception: new Exception("error message"),
+                        expectedException: new AwaitException(new Exception("error message")));
                     CreateTest(
-                        error: Error.Create("error message"),
-                        expectedException: new AwaitErrorException(Error.Create("error message")));
+                        exception: new Exception("error message"),
+                        expectedException: new Exception("error message"));
                 });
 
                 runner.TestMethod("Create<T>(T)", () =>
@@ -62,33 +70,37 @@ namespace Everyone
                     CreateTest(false);
                     CreateTest((string?)null);
                     CreateTest("hello");
-                    CreateTest(Error.Create("error message"));
+                    CreateTest(new Exception("error message"));
                 });
 
-                runner.TestMethod("Create<T>(Error)", () =>
+                runner.TestMethod("Create<T>(Exception)", () =>
                 {
-                    void CreateTest<T>(Error error, Exception expectedException)
+                    void CreateTest<T>(Exception exception, Exception expectedException)
                     {
-                        runner.Test($"with {runner.ToString(error)}", (Test test) =>
+                        runner.Test($"with {runner.ToString(exception)}", (Test test) =>
                         {
                             test.AssertThrows(expectedException, () =>
                             {
-                                BasicResult<T> result = BasicResult.Create<T>(error: error);
+                                BasicResult<T> result = BasicResult.Create<T>(exception: exception);
                                 test.AssertNotNull(result);
+
                                 result.Await();
                             });
                         });
                     }
 
                     CreateTest<int>(
-                        error: null!,
+                        exception: null!,
                         expectedException: new PreConditionFailure(
-                            "Expression: error",
+                            "Expression: exception",
                             "Expected: not null",
                             "Actual:   null"));
                     CreateTest<int>(
-                        error: Error.Create("error message"),
-                        expectedException: new AwaitErrorException(Error.Create("error message")));
+                        exception: new Exception("error message"),
+                        expectedException: new AwaitException(new Exception("error message")));
+                    CreateTest<int>(
+                        exception: new Exception("error message"),
+                        expectedException: new Exception("error message"));
                 });
             });
         }

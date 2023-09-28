@@ -97,8 +97,7 @@ namespace Everyone
             else
             {
                 StringBuilder builder = new StringBuilder();
-                while (exception is AwaitErrorException ||
-                       exception is AwaitException)
+                while (exception is AwaitException)
                 {
                     builder.Append($"{Types.GetFullName(exception)}: ");
                     exception = exception.InnerException!;

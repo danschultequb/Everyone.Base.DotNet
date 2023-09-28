@@ -5,6 +5,15 @@ namespace Everyone
     public static class Exceptions
     {
         /// <summary>
+        /// Unwrap the provided <paramref name="value"/>.
+        /// </summary>
+        /// <param name="value"></param>
+        public static Exception Unwrap(this Exception value)
+        {
+            return Exceptions.UnwrapTo<Exception>(value)!;
+        }
+
+        /// <summary>
         /// Unwrap the provided <paramref name="value"/> to the provided type
         /// <typeparamref name="T"/>. This will unwrap any <see cref="Exception"/> and
         /// <see cref="UncaughtExceptionError"/> until it runs out of values to unwrap and returns
@@ -12,9 +21,9 @@ namespace Everyone
         /// </summary>
         /// <typeparam name="T">The type to unwrap the <paramref name="value"/> to.</typeparam>
         /// <param name="value">The value to unwrap.</param>
-        public static T? UnwrapTo<T>(object? value)
+        public static T? UnwrapTo<T>(this Exception value) where T : Exception
         {
-            return (T?)Exceptions.UnwrapTo(typeof(T), value);
+            return Exceptions.UnwrapTo(value, typeof(T)) as T;
         }
 
         /// <summary>
@@ -25,11 +34,12 @@ namespace Everyone
         /// </summary>
         /// <param name="targetType">The type to unwrap the <paramref name="value"/> to.</param>
         /// <param name="value">The value to unwrap.</param>
-        public static object? UnwrapTo(Type targetType, object? value)
+        public static Exception? UnwrapTo(this Exception value, Type targetType)
         {
+            Pre.Condition.AssertNotNull(value, nameof(value));
             Pre.Condition.AssertNotNull(targetType, nameof(targetType));
 
-            object? result = value;
+            Exception? result = value;
             while (true)
             {
                 if (result?.GetType() == targetType)
@@ -39,14 +49,6 @@ namespace Everyone
                 else if (result is AwaitException awaitException)
                 {
                     result = awaitException.InnerException;
-                }
-                if (result is AwaitErrorException awaitErrorException)
-                {
-                    result = awaitErrorException.Error;
-                }
-                else if (result is UncaughtExceptionError resultError)
-                {
-                    result = resultError.UncaughtException;
                 }
                 else if (Types.InstanceOf(result, targetType))
                 {
@@ -60,6 +62,14 @@ namespace Everyone
             }
 
             return result;
+        }
+
+        [Obsolete]
+        public static object? UnwrapTo(Type targetType, object? value)
+        {
+            Pre.Condition.AssertTrue(value is Exception, "value is Exception");
+
+            return Exceptions.UnwrapTo((value as Exception)!, targetType);
         }
     }
 }

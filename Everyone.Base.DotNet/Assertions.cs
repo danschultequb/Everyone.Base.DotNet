@@ -1029,7 +1029,7 @@ namespace Everyone
                 parameters: parameters);
         }
 
-        public TAssertions AssertContains(string text, string substring, AssertParameters? parameters)
+        public TAssertions AssertContains(string? text, string substring, AssertParameters? parameters)
         {
             if (text?.Contains(substring) != true)
             {
