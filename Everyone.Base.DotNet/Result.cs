@@ -26,14 +26,6 @@ namespace Everyone
         }
 
         /// <summary>
-        /// Create a new successful <see cref="Result{T}"/>.
-        /// </summary>
-        public static Result<T> Create<T>()
-        {
-            return BasicResult.Create<T>();
-        }
-
-        /// <summary>
         /// Create a new value <see cref="Result{T}"/> from the provided <paramref name="value"/>.
         /// </summary>
         /// <typeparam name="T">The type of value the <see cref="Result{T}"/> is expected to
@@ -41,7 +33,7 @@ namespace Everyone
         /// <param name="value">The value that the returned <see cref="Result{T}"/> will contain.</param>
         public static Result<T> Create<T>(T value)
         {
-            return BasicResult.Create(value);
+            return BasicResult<T>.Create(value);
         }
 
         /// <summary>
@@ -53,7 +45,7 @@ namespace Everyone
         /// <see cref="Result{T}"/> will contain.</param>
         public static Result<T> Create<T>(Exception exception)
         {
-            return BasicResult.Create<T>(exception);
+            return BasicResult<T>.Create(exception);
         }
 
         /// <summary>

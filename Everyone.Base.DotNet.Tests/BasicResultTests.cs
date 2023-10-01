@@ -48,14 +48,17 @@ namespace Everyone
                         exception: new Exception("error message"),
                         expectedException: new Exception("error message"));
                 });
+            });
 
-                runner.TestMethod("Create<T>(T)", () =>
+            runner.TestType("BasicResult<T>", () =>
+            {
+                runner.TestMethod("Create(T)", () =>
                 {
                     void CreateTest<T>(T value)
                     {
                         runner.Test($"with {runner.ToString(value)}", (Test test) =>
                         {
-                            BasicResult<T> result = BasicResult.Create(value);
+                            BasicResult<T> result = BasicResult<T>.Create(value);
                             test.AssertNotNull(result);
                             for (int i = 0; i < 2; i++)
                             {
@@ -73,7 +76,7 @@ namespace Everyone
                     CreateTest(new Exception("error message"));
                 });
 
-                runner.TestMethod("Create<T>(Exception)", () =>
+                runner.TestMethod("Create(Exception)", () =>
                 {
                     void CreateTest<T>(Exception exception, Exception expectedException)
                     {
@@ -81,7 +84,7 @@ namespace Everyone
                         {
                             test.AssertThrows(expectedException, () =>
                             {
-                                BasicResult<T> result = BasicResult.Create<T>(exception: exception);
+                                BasicResult<T> result = BasicResult<T>.Create(exception: exception);
                                 test.AssertNotNull(result);
 
                                 result.Await();

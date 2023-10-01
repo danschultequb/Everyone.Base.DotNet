@@ -574,7 +574,7 @@ namespace Everyone
 
                     runner.Test("with Action that throws an exception", (Test test) =>
                     {
-                        Result<int> r1 = Result.Create<int>();
+                        Result<int> r1 = Result.Create<int>(3);
                         Result<bool> r2 = r1.Then<bool>(() => { throw new Exception("abc"); });
                         test.AssertNotNull(r2);
                         test.AssertNotSame(r1, r2);
@@ -659,7 +659,7 @@ namespace Everyone
 
                     runner.Test("with Action that throws an exception", (Test test) =>
                     {
-                        Result<int> r1 = Result.Create<int>();
+                        Result<int> r1 = Result.Create<int>(2);
                         Result<bool> r2 = r1.Then<bool>((int r1Value) => { throw new Exception("abc"); });
                         test.AssertNotNull(r2);
                         test.AssertNotSame(r1, r2);

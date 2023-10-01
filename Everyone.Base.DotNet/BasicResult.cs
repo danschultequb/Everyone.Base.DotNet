@@ -23,23 +23,6 @@ namespace Everyone
             return new BasicResult(exception);
         }
 
-        public static BasicResult<T> Create<T>()
-        {
-            return BasicResult<T>.Create(exception: null);
-        }
-
-        public static BasicResult<T> Create<T>(Exception exception)
-        {
-            Pre.Condition.AssertNotNull(exception, nameof(exception));
-
-            return BasicResult<T>.Create(exception);
-        }
-
-        public static BasicResult<T> Create<T>(T value)
-        {
-            return BasicResult<T>.Create(value);
-        }
-
         public override void Await()
         {
             if (this.exception != null)
@@ -60,8 +43,10 @@ namespace Everyone
             this.exception = exception;
         }
 
-        public static BasicResult<T> Create(Exception? exception)
+        public static BasicResult<T> Create(Exception exception)
         {
+            Pre.Condition.AssertNotNull(exception, nameof(exception));
+
             return new BasicResult<T>(value: default, exception: exception);
         }
 
