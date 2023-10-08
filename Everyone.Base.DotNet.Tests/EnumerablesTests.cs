@@ -273,6 +273,69 @@ namespace Everyone
                         toCheck: new[] { '\"' },
                         expected: true);
                 });
+
+                runner.TestMethod("ToString(this IEnumerable,Func<object?,string>?)", () =>
+                {
+                    runner.Test("with null and null", (Test test) =>
+                    {
+                        test.AssertEqual("null", Enumerables.ToString(null, null));
+                    });
+
+                    runner.Test("with null and non-null", (Test test) =>
+                    {
+                        test.AssertEqual("null", Enumerables.ToString(null, value => value?.ToString() ?? "NULL"));
+                    });
+
+                    runner.Test("with empty and null", (Test test) =>
+                    {
+                        test.AssertEqual("[]", Enumerables.ToString(new int[0], null));
+                    });
+
+                    runner.Test("with empty and non-null", (Test test) =>
+                    {
+                        test.AssertEqual("[]", Enumerables.ToString(new int[0], value => value?.ToString() ?? "NULL"));
+                    });
+
+                    runner.Test("with one non-null value and null", (Test test) =>
+                    {
+                        test.AssertEqual("[1]", Enumerables.ToString(new[] { 1 }, null));
+                    });
+
+                    runner.Test("with one non-null value and non-null", (Test test) =>
+                    {
+                        test.AssertEqual("[1]", Enumerables.ToString(new[] { 1 }, value => value?.ToString() ?? "NULL"));
+                    });
+
+                    runner.Test("with two non-null values and null", (Test test) =>
+                    {
+                        test.AssertEqual("[1,2]", Enumerables.ToString(new[] { 1, 2 }, null));
+                    });
+
+                    runner.Test("with two non-null values and non-null", (Test test) =>
+                    {
+                        test.AssertEqual("[1,2]", Enumerables.ToString(new[] { 1, 2 }, value => value?.ToString() ?? "NULL"));
+                    });
+
+                    runner.Test("with one null value and null", (Test test) =>
+                    {
+                        test.AssertEqual("[null]", Enumerables.ToString(new object?[] { null }, null));
+                    });
+
+                    runner.Test("with one null value and non-null", (Test test) =>
+                    {
+                        test.AssertEqual("[NULL]", Enumerables.ToString(new object?[] { null }, value => value?.ToString() ?? "NULL"));
+                    });
+
+                    runner.Test("with two-layer null list and null", (Test test) =>
+                    {
+                        test.AssertEqual("[System.Object[]]", Enumerables.ToString(new[] { new object?[] { null } }, null));
+                    });
+
+                    runner.Test("with two-layer null list and non-null", (Test test) =>
+                    {
+                        test.AssertEqual("[System.Object[]]", Enumerables.ToString(new[] { new object?[] { null } }, value => value?.ToString() ?? "NULL"));
+                    });
+                });
             });
         }
     }

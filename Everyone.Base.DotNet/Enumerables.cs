@@ -244,5 +244,39 @@ namespace Everyone
 
             return Iterator.Create(enumerable.GetEnumerator());
         }
+
+        public static string ToString(this IEnumerable? values, Func<object?,string>? toStringFunction = null)
+        {
+            string result = "null";
+            if (values != null)
+            {
+                if (toStringFunction == null)
+                {
+                    toStringFunction = (object? value) => value?.ToString() ?? "null";
+                }
+
+                StringBuilder builder = new StringBuilder();
+                builder.Append('[');
+                bool firstValue = true;
+                foreach (object? value in values)
+                {
+                    if (firstValue)
+                    {
+                        firstValue = false;
+                    }
+                    else
+                    {
+                        builder.Append(',');
+                    }
+                    builder.Append(toStringFunction.Invoke(value));
+                }
+                builder.Append(']');
+                result = builder.ToString();
+            }
+
+            Post.Condition.AssertNotNullAndNotEmpty(result, nameof(result));
+
+            return result;
+        }
     }
 }

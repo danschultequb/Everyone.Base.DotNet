@@ -63,13 +63,5 @@ namespace Everyone
 
             return result;
         }
-
-        [Obsolete]
-        public static object? UnwrapTo(Type targetType, object? value)
-        {
-            Pre.Condition.AssertTrue(value is Exception, "value is Exception");
-
-            return Exceptions.UnwrapTo((value as Exception)!, targetType);
-        }
     }
 }

@@ -42,28 +42,7 @@ namespace Everyone
 
         public string EnumerableToString(IEnumerable? values)
         {
-            string result = "null";
-            if (values != null)
-            {
-                StringBuilder builder = new StringBuilder();
-                builder.Append('[');
-                bool firstValue = true;
-                foreach (object value in values)
-                {
-                    if (firstValue)
-                    {
-                        firstValue = false;
-                    }
-                    else
-                    {
-                        builder.Append(',');
-                    }
-                    builder.Append(this.ToString(value));
-                }
-                builder.Append(']');
-                result = builder.ToString();
-            }
-            return result;
+            return Enumerables.ToString(values, this.ToString);
         }
 
         public string TupleToString(ITuple? tuple)
