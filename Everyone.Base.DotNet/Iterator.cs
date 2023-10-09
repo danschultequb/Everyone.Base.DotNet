@@ -57,11 +57,11 @@
     {
         public abstract T Current { get; }
 
-        public abstract bool Disposed { get; }
+        public abstract bool IsDisposed();
 
         object? System.Collections.IEnumerator.Current => this.Current;
 
-        public abstract bool Dispose();
+        public abstract Result<bool> Dispose();
 
         public System.Collections.Generic.IEnumerator<T> GetEnumerator()
         {
@@ -132,9 +132,12 @@
 
         public override T Current => this.innerIterator.Current;
 
-        public override bool Disposed => this.innerIterator.Disposed;
+        public override bool IsDisposed()
+        {
+            return this.innerIterator.IsDisposed();
+        }
 
-        public override bool Dispose()
+        public override Result<bool> Dispose()
         {
             return this.innerIterator.Dispose();
         }

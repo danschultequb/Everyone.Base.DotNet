@@ -20,7 +20,7 @@ namespace Everyone
                 {
                     runner.Test("with null", (Test test) =>
                     {
-                        test.AssertThrows(() => BasicResult.Create(exception: null!),
+                        test.AssertThrows(() => BasicResult.Error(exception: null!),
                             new PreConditionFailure(
                                 "Expression: exception",
                                 "Expected: not null",
@@ -31,7 +31,7 @@ namespace Everyone
                     {
                         runner.Test($"with {runner.ToString(exception)}", (Test test) =>
                         {
-                            BasicResult result = BasicResult.Create(exception: exception);
+                            BasicResult result = BasicResult.Error(exception: exception);
                             test.AssertNotNull(result);
 
                             for (int i = 0; i < 2; i++)
@@ -84,7 +84,7 @@ namespace Everyone
                         {
                             test.AssertThrows(expectedException, () =>
                             {
-                                BasicResult<T> result = BasicResult<T>.Create(exception: exception);
+                                BasicResult<T> result = BasicResult<T>.Error(exception: exception);
                                 test.AssertNotNull(result);
 
                                 result.Await();

@@ -24,10 +24,10 @@ namespace Everyone
                         Disposable disposable = Disposable.Create(() => counter++);
                         test.AssertEqual(0, counter);
 
-                        test.AssertTrue(disposable.Dispose());
+                        test.AssertTrue(disposable.Dispose().Await());
                         test.AssertEqual(1, counter);
 
-                        test.AssertFalse(disposable.Dispose());
+                        test.AssertFalse(disposable.Dispose().Await());
                         test.AssertEqual(1, counter);
                     });
                 });

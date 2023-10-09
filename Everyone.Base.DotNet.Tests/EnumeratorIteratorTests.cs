@@ -110,15 +110,15 @@ namespace Everyone
                 runner.TestMethod("Dispose()", (Test test) =>
                 {
                     EnumeratorIterator<int> iterator = CreateIterator<int>();
-                    test.AssertFalse(iterator.Disposed);
+                    test.AssertFalse(iterator.IsDisposed());
 
-                    test.AssertTrue(iterator.Dispose());
-                    test.AssertTrue(iterator.Disposed);
+                    test.AssertTrue(iterator.Dispose().Await());
+                    test.AssertTrue(iterator.IsDisposed());
 
                     for (int i = 0; i < 2; i++)
                     {
-                        test.AssertFalse(iterator.Dispose());
-                        test.AssertTrue(iterator.Disposed);
+                        test.AssertFalse(iterator.Dispose().Await());
+                        test.AssertTrue(iterator.IsDisposed());
                     }
                 });
 

@@ -51,13 +51,13 @@ namespace Everyone
                         using (Disposable subscription = e.Subscribe(() => { }))
                         {
                             test.AssertNotNull(subscription);
-                            test.AssertFalse(subscription.Disposed);
+                            test.AssertFalse(subscription.IsDisposed());
 
-                            test.AssertTrue(subscription.Dispose());
-                            test.AssertTrue(subscription.Disposed);
+                            test.AssertTrue(subscription.Dispose().Await());
+                            test.AssertTrue(subscription.IsDisposed());
 
-                            test.AssertFalse(subscription.Dispose());
-                            test.AssertTrue(subscription.Disposed);
+                            test.AssertFalse(subscription.Dispose().Await());
+                            test.AssertTrue(subscription.IsDisposed());
                         }
                     });
                 });
@@ -87,13 +87,13 @@ namespace Everyone
                         using (Disposable subscription = e.Subscribe((int arg1) => { }))
                         {
                             test.AssertNotNull(subscription);
-                            test.AssertFalse(subscription.Disposed);
+                            test.AssertFalse(subscription.IsDisposed());
 
-                            test.AssertTrue(subscription.Dispose());
-                            test.AssertTrue(subscription.Disposed);
+                            test.AssertTrue(subscription.Dispose().Await());
+                            test.AssertTrue(subscription.IsDisposed());
 
-                            test.AssertFalse(subscription.Dispose());
-                            test.AssertTrue(subscription.Disposed);
+                            test.AssertFalse(subscription.Dispose().Await());
+                            test.AssertTrue(subscription.IsDisposed());
                         }
                     });
                 });
@@ -123,13 +123,13 @@ namespace Everyone
                         using (Disposable subscription = e.Subscribe((int arg1, bool arg2) => { }))
                         {
                             test.AssertNotNull(subscription);
-                            test.AssertFalse(subscription.Disposed);
+                            test.AssertFalse(subscription.IsDisposed());
 
-                            test.AssertTrue(subscription.Dispose());
-                            test.AssertTrue(subscription.Disposed);
+                            test.AssertTrue(subscription.Dispose().Await());
+                            test.AssertTrue(subscription.IsDisposed());
 
-                            test.AssertFalse(subscription.Dispose());
-                            test.AssertTrue(subscription.Disposed);
+                            test.AssertFalse(subscription.Dispose().Await());
+                            test.AssertTrue(subscription.IsDisposed());
                         }
                     });
                 });

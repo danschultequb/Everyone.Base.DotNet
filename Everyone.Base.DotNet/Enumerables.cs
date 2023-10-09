@@ -245,7 +245,7 @@ namespace Everyone
             return Iterator.Create(enumerable.GetEnumerator());
         }
 
-        public static string ToString(this IEnumerable? values, Func<object?,string>? toStringFunction = null)
+        public static string ToString(this IEnumerable? values, Func<object?,string>? toStringFunction = null, char start = '[', char end = ']')
         {
             string result = "null";
             if (values != null)
@@ -256,7 +256,7 @@ namespace Everyone
                 }
 
                 StringBuilder builder = new StringBuilder();
-                builder.Append('[');
+                builder.Append(start);
                 bool firstValue = true;
                 foreach (object? value in values)
                 {
@@ -270,13 +270,26 @@ namespace Everyone
                     }
                     builder.Append(toStringFunction.Invoke(value));
                 }
-                builder.Append(']');
+                builder.Append(end);
                 result = builder.ToString();
             }
 
             Post.Condition.AssertNotNullAndNotEmpty(result, nameof(result));
 
             return result;
+        }
+
+        public static int GetHashCode(this IEnumerable? enumerable)
+        {
+            HashCode hashCode = HashCode.Create();
+            if (enumerable != null)
+            {
+                foreach (object? value in enumerable)
+                {
+                    hashCode.Add(value);
+                }
+            }
+            return hashCode.Value;
         }
     }
 }

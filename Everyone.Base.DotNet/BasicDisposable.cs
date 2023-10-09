@@ -5,23 +5,40 @@ namespace Everyone
     public class BasicDisposable : Disposable
     {
         private readonly Action action;
+        private bool disposed;
 
-        public BasicDisposable(Action action)
+        protected BasicDisposable(Action action)
         {
             this.action = action ?? throw new ArgumentNullException(nameof(action));
         }
 
-        public bool Disposed { get; private set; }
-
-        public bool Dispose()
+        public static BasicDisposable Create()
         {
-            bool result = !this.Disposed;
-            if (result)
+            return BasicDisposable.Create(() => { });
+        }
+
+        public static BasicDisposable Create(Action action)
+        {
+            return new BasicDisposable(action);
+        }
+
+        public bool IsDisposed()
+        {
+            return this.disposed;
+        }
+
+        public Result<bool> Dispose()
+        {
+            return Result.Create(() =>
             {
-                this.Disposed = true;
-                this.action.Invoke();
-            }
-            return result;
+                bool result = !this.disposed;
+                if (result)
+                {
+                    this.disposed = true;
+                    this.action.Invoke();
+                }
+                return result;
+            });
         }
     }
 }

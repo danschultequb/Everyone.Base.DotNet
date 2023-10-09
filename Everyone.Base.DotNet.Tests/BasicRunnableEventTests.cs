@@ -40,13 +40,13 @@ namespace Everyone
                         e.Invoke();
                         test.AssertEqual(1, counter);
 
-                        test.AssertTrue(subscription.Dispose());
+                        test.AssertTrue(subscription.Dispose().Await());
                         test.AssertEqual(1, counter);
 
                         e.Invoke();
                         test.AssertEqual(1, counter);
 
-                        test.AssertFalse(subscription.Dispose());
+                        test.AssertFalse(subscription.Dispose().Await());
 
                         e.Invoke();
                         test.AssertEqual(1, counter);
@@ -88,13 +88,13 @@ namespace Everyone
                         e.Invoke(2);
                         test.AssertEqual(2, counter);
 
-                        test.AssertTrue(subscription.Dispose());
+                        test.AssertTrue(subscription.Dispose().Await());
                         test.AssertEqual(2, counter);
 
                         e.Invoke(3);
                         test.AssertEqual(2, counter);
 
-                        test.AssertFalse(subscription.Dispose());
+                        test.AssertFalse(subscription.Dispose().Await());
 
                         e.Invoke(4);
                         test.AssertEqual(2, counter);
@@ -136,13 +136,13 @@ namespace Everyone
                         e.Invoke(2, false);
                         test.AssertEqual(2, counter);
 
-                        test.AssertTrue(subscription.Dispose());
+                        test.AssertTrue(subscription.Dispose().Await());
                         test.AssertEqual(2, counter);
 
                         e.Invoke(3, true);
                         test.AssertEqual(2, counter);
 
-                        test.AssertFalse(subscription.Dispose());
+                        test.AssertFalse(subscription.Dispose().Await());
 
                         e.Invoke(4, false);
                         test.AssertEqual(2, counter);

@@ -13,7 +13,7 @@ namespace Everyone
     public class EnumeratorIterator<T> : IteratorBase<T, EnumeratorIterator<T>>
     {
         private readonly IEnumerator<T> enumerator;
-        private bool disposed;
+        private readonly Disposable disposable;
         private bool hasStarted;
         private bool hasCurrent;
 
@@ -22,6 +22,7 @@ namespace Everyone
             Pre.Condition.AssertNotNull(enumerator, nameof(enumerator));
 
             this.enumerator = enumerator;
+            this.disposable = Disposable.Create(enumerator);
         }
 
         internal static EnumeratorIterator<T> Create(IEnumerator<T> enumerator)
@@ -29,18 +30,14 @@ namespace Everyone
             return new EnumeratorIterator<T>(enumerator);
         }
 
-        public override bool Disposed => this.disposed;
-
-        public override bool Dispose()
+        public override bool IsDisposed()
         {
-            bool result = !this.disposed;
-            if (result)
-            {
-                this.disposed = true;
+            return this.disposable.IsDisposed();
+        }
 
-                this.enumerator.Dispose();
-            }
-            return result;
+        public override Result<bool> Dispose()
+        {
+            return this.disposable.Dispose();
         }
 
         public override bool HasCurrent()

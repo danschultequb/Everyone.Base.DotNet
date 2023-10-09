@@ -16,7 +16,7 @@ namespace Everyone
             return new BasicResult(exception: null);
         }
 
-        public static BasicResult Create(Exception exception)
+        public static BasicResult Error(Exception exception)
         {
             Pre.Condition.AssertNotNull(exception, nameof(exception));
 
@@ -34,8 +34,8 @@ namespace Everyone
 
     public class BasicResult<T> : ResultBase<T>
     {
-        private readonly T? value;
         private readonly Exception? exception;
+        private readonly T? value;
 
         protected BasicResult(T? value, Exception? exception)
         {
@@ -43,7 +43,7 @@ namespace Everyone
             this.exception = exception;
         }
 
-        public static BasicResult<T> Create(Exception exception)
+        public static BasicResult<T> Error(Exception exception)
         {
             Pre.Condition.AssertNotNull(exception, nameof(exception));
 
@@ -52,7 +52,7 @@ namespace Everyone
 
         public static BasicResult<T> Create(T value)
         {
-            return new BasicResult<T>(value: value, exception: null);
+            return new BasicResult<T>(value: value, exception: default);
         }
 
         public override T Await()
