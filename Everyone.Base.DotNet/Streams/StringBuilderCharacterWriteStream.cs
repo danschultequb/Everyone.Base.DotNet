@@ -20,9 +20,9 @@ namespace Everyone
         {
             return new StringBuilderCharacterWriteStream();
         }
-        public bool IsDisposed()
+        public DisposableState GetDisposableState()
         {
-            return this.disposable.IsDisposed();
+            return this.disposable.GetDisposableState();
         }
 
         public Result<bool> Dispose()

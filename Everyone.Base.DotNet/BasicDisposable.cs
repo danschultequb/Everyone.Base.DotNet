@@ -5,11 +5,12 @@ namespace Everyone
     public class BasicDisposable : Disposable
     {
         private readonly Action action;
-        private bool disposed;
+        private DisposableState state;
 
         protected BasicDisposable(Action action)
         {
             this.action = action ?? throw new ArgumentNullException(nameof(action));
+            this.state = DisposableState.NotDisposed;
         }
 
         public static BasicDisposable Create()
@@ -22,23 +23,30 @@ namespace Everyone
             return new BasicDisposable(action);
         }
 
-        public bool IsDisposed()
-        {
-            return this.disposed;
-        }
-
         public Result<bool> Dispose()
         {
             return Result.Create(() =>
             {
-                bool result = !this.disposed;
+                bool result = (this.state == DisposableState.NotDisposed);
                 if (result)
                 {
-                    this.disposed = true;
-                    this.action.Invoke();
+                    this.state = DisposableState.Disposing;
+                    try
+                    {
+                        this.action.Invoke();
+                    }
+                    finally
+                    {
+                        this.state = DisposableState.Disposed;
+                    }
                 }
                 return result;
             });
+        }
+
+        public DisposableState GetDisposableState()
+        {
+            return this.state;
         }
     }
 }

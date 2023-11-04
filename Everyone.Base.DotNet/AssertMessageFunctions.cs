@@ -176,6 +176,14 @@ namespace Everyone
         public string ExpectedNotDisposed(Disposable value, AssertParameters? parameters);
 
         /// <summary>
+        /// Get the message that explains that the provided <see cref="Disposable"/> should have
+        /// been not disposing and not disposed.
+        /// </summary>
+        /// <param name="value">The value to that should've been not disposing and not disposed.</param>
+        /// <param name="parameters">The optional parameters for the error message.</param>
+        public string ExpectedNotDisposingAndNotDisposed(Disposable value, AssertParameters? parameters);
+
+        /// <summary>
         /// Get the message that explains that the provided <paramref name="value"/> should have
         /// been one of the provided <paramref name="possibilities"/>.
         /// </summary>

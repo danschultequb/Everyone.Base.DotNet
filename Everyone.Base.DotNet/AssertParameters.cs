@@ -1,13 +1,11 @@
-﻿using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
+﻿using System.Text;
 
 namespace Everyone
 {
     /// <summary>
     /// Optional parameters that can be provided when generating a failed assertion message.
     /// </summary>
-    public record AssertParameters
+    public class AssertParameters
     {
         /// <summary>
         /// The initial line that explains the failure in more detail.
@@ -30,25 +28,13 @@ namespace Everyone
 
         public ToStringFunctions? ToStringFunctions { get; set; }
 
-        private static void AddJSONProperty(StringBuilder builder, string propertyName, string? propertyValue)
-        {
-            if (!string.IsNullOrEmpty(propertyValue))
-            {
-                if (!builder.EndsWith('{'))
-                {
-                    builder.Append(',');
-                }
-                builder.Append(new[] { propertyName, propertyValue }.Map((string value) => Strings.EscapeAndQuote(value)).Join(':'));
-            }
-        }
-
         public override string ToString()
         {
             StringBuilder builder = new StringBuilder();
             builder.Append("{");
-            AssertParameters.AddJSONProperty(builder, nameof(this.Message), this.Message);
-            AssertParameters.AddJSONProperty(builder, nameof(this.Expression), this.Expression);
-            AssertParameters.AddJSONProperty(builder, nameof(this.NewLine), this.NewLine);
+            builder.AppendJSONProperty(nameof(this.Message), this.Message);
+            builder.AppendJSONProperty(nameof(this.Expression), this.Expression);
+            builder.AppendJSONProperty(nameof(this.NewLine), this.NewLine);
             builder.Append("}");
 
             return builder.ToString();

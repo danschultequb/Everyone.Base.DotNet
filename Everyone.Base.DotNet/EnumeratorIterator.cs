@@ -30,9 +30,9 @@ namespace Everyone
             return new EnumeratorIterator<T>(enumerator);
         }
 
-        public override bool IsDisposed()
+        public override DisposableState GetDisposableState()
         {
-            return this.disposable.IsDisposed();
+            return this.disposable.GetDisposableState();
         }
 
         public override Result<bool> Dispose()

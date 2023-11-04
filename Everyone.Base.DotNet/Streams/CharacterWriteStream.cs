@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Everyone
 {
@@ -46,9 +44,9 @@ namespace Everyone
             this.innerStream = innerStream;
         }
 
-        public bool IsDisposed()
+        public DisposableState GetDisposableState()
         {
-            return this.innerStream.IsDisposed();
+            return this.innerStream.GetDisposableState();
         }
 
         public Result<bool> Dispose()

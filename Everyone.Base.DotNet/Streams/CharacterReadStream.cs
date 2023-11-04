@@ -36,9 +36,9 @@ namespace Everyone
             this.innerStream = innerStream;
         }
 
-        public bool IsDisposed()
+        public DisposableState GetDisposableState()
         {
-            return this.innerStream.IsDisposed();
+            return this.innerStream.GetDisposableState();
         }
 
         public Result<bool> Dispose()

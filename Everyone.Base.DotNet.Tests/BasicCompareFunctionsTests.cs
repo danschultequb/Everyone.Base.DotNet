@@ -120,7 +120,7 @@ namespace Everyone
                         using (Disposable addEqualFunctionResult = functions.AddEqualFunction((int lhs, bool rhs) => (lhs == 0) == (rhs == false)))
                         {
                             test.AssertNotNull(addEqualFunctionResult);
-                            test.AssertFalse(addEqualFunctionResult.IsDisposed());
+                            test.AssertTrue(addEqualFunctionResult.IsNotDisposed());
 
                             test.AssertTrue(functions.AreEqual(0, false));
                             test.AssertFalse(functions.AreEqual(0, true));
@@ -134,7 +134,7 @@ namespace Everyone
                             using (Disposable addEqualFunctionResult2 = functions.AddEqualFunction((int lhs, bool rhs) => (lhs % 2 == 0) == (rhs == false)))
                             {
                                 test.AssertNotNull(addEqualFunctionResult2);
-                                test.AssertFalse(addEqualFunctionResult2.IsDisposed());
+                                test.AssertTrue(addEqualFunctionResult2.IsNotDisposed());
 
                                 test.AssertTrue(functions.AreEqual(0, false));
                                 test.AssertFalse(functions.AreEqual(0, true));

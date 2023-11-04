@@ -37,5 +37,20 @@ namespace Everyone
             return builder.Any() &&
                    builder.Last() == value;
         }
+
+        public static StringBuilder AppendJSONProperty(this StringBuilder builder, string propertyName, string? propertyValue)
+        {
+            Pre.Condition.AssertNotNull(builder, nameof(builder));
+            Pre.Condition.AssertNotNullAndNotEmpty(propertyName, nameof(propertyName));
+            Pre.Condition.AssertNotNull(propertyValue, nameof(propertyValue));
+
+            if (!builder.EndsWith('{'))
+            {
+                builder.Append(',');
+            }
+            builder.Append($"{propertyName.EscapeAndQuote('\"')}:{propertyValue.EscapeAndQuote('\"')}");
+
+            return builder;
+        }
     }
 }

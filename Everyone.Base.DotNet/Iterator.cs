@@ -57,7 +57,7 @@
     {
         public abstract T Current { get; }
 
-        public abstract bool IsDisposed();
+        public abstract DisposableState GetDisposableState();
 
         object? System.Collections.IEnumerator.Current => this.Current;
 
@@ -132,9 +132,9 @@
 
         public override T Current => this.innerIterator.Current;
 
-        public override bool IsDisposed()
+        public override DisposableState GetDisposableState()
         {
-            return this.innerIterator.IsDisposed();
+            return this.innerIterator.GetDisposableState();
         }
 
         public override Result<bool> Dispose()

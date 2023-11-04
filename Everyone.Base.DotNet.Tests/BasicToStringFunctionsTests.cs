@@ -173,7 +173,7 @@ namespace Everyone
                         using (Disposable addToStringFunctionResult = functions.AddToStringFunction((int? value) => value == null ? "null" : $"{value}.{value}"))
                         {
                             test.AssertNotNull(addToStringFunctionResult);
-                            test.AssertFalse(addToStringFunctionResult.IsDisposed());
+                            test.AssertTrue(addToStringFunctionResult.IsNotDisposed());
 
                             test.AssertEqual("null", functions.ToString<int?>(null!));
                             test.AssertEqual("1.1", functions.ToString(1));
@@ -182,7 +182,7 @@ namespace Everyone
                             using (Disposable addToStringFunctionResult2 = functions.AddToStringFunction((int? value) => value == null ? "null" : $"{value}.{value}.{value}"))
                             {
                                 test.AssertNotNull(addToStringFunctionResult2);
-                                test.AssertFalse(addToStringFunctionResult2.IsDisposed());
+                                test.AssertTrue(addToStringFunctionResult2.IsNotDisposed());
 
                                 test.AssertEqual("null", functions.ToString<int?>(null!));
                                 test.AssertEqual("1.1.1", functions.ToString(1));

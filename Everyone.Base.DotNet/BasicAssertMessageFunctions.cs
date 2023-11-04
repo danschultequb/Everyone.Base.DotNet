@@ -184,6 +184,14 @@ namespace Everyone
                 parameters: parameters);
         }
 
+        public string ExpectedNotDisposingAndNotDisposed(Disposable value, AssertParameters? parameters)
+        {
+            return this.Expected(
+                expected: $"not {this.ToString(DisposableState.Disposing)} and not {this.ToString(DisposableState.Disposed)}",
+                actual:   $"{this.ToString(value.GetDisposableState())}",
+                parameters: parameters);
+        }
+
         public string ExpectedOneOf<T, U>(T value, IEnumerable<U> possibilities, AssertParameters? parameters)
         {
             return this.Expected(

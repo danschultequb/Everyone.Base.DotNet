@@ -961,7 +961,7 @@ namespace Everyone
 
         public TAssertions AssertNotDisposed(Disposable value, AssertParameters? parameters)
         {
-            if (value.IsDisposed())
+            if (!value.IsNotDisposed())
             {
                 throw this.createExceptionFunction(
                     this.GetAssertMessageFunctions(parameters)

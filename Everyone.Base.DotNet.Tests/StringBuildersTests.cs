@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Text;
 
 namespace Everyone
@@ -25,6 +26,27 @@ namespace Everyone
                     EndsWithTest(new StringBuilder("abc"), 'a', false);
                     EndsWithTest(new StringBuilder("abc"), 'b', false);
                     EndsWithTest(new StringBuilder("abc"), 'c', true);
+                });
+
+                runner.TestMethod("AddJSONProperty(this StringBuilder, string, string)", () =>
+                {
+                    void AddJSONPropertyTest(string initialText, string propertyName, string propertyValue, string expectedText, Exception? expectedException = null)
+                    {
+                        runner.Test($"with {Language.AndList(new[] { initialText, propertyName, propertyValue }.Map(runner.ToString))}", (Test test) =>
+                        {
+                            test.AssertThrows(expectedException, () =>
+                            {
+                                StringBuilder builder = new StringBuilder(initialText);
+                                StringBuilder addJSONPropertyResult = StringBuilders.AppendJSONProperty(builder, propertyName, propertyValue);
+                                test.AssertSame(builder, addJSONPropertyResult);
+                                test.AssertEqual(expectedText, builder.ToString());
+                            });
+                        });
+                    }
+
+                    AddJSONPropertyTest("", "a", "b", ",\"a\":\"b\"");
+                    AddJSONPropertyTest("{", "a", "b", "{\"a\":\"b\"");
+                    AddJSONPropertyTest("{\"a\":\"b\"", "c", "d", "{\"a\":\"b\",\"c\":\"d\"");
                 });
             });
         }
