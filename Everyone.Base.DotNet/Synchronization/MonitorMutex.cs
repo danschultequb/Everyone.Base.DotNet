@@ -2,7 +2,7 @@
 
 namespace Everyone
 {
-    public class MonitorMutex : ClockMutex
+    public class MonitorMutex : Mutex
     {
         private readonly Clock clock;
         private readonly bool isSystemClock;
@@ -27,14 +27,39 @@ namespace Everyone
             return new MonitorMutex(clock);
         }
 
-        private bool IsOwnedByCurrentThread()
+        MutableMutexCondition Mutex.CreateCondition()
         {
-            return System.Threading.Monitor.IsEntered(this.lockObject);
+            return this.CreateCondition();
+        }
+
+        MutableMutexCondition Mutex.CreateCondition(Func<bool> condition)
+        {
+            return this.CreateCondition(condition);
+        }
+
+        public MonitorMutexCondition CreateCondition()
+        {
+            return MonitorMutexCondition.Create(this, this.clock, this.lockObject);
+        }
+
+        public MonitorMutexCondition CreateCondition(Func<bool> condition)
+        {
+            Pre.Condition.AssertNotNull(condition, nameof(condition));
+
+            return MonitorMutexCondition.Create(this, this.clock, this.lockObject, condition);
+        }
+
+        public Result<bool> IsOwnedByCurrentThread()
+        {
+            return Result.Create(() =>
+            {
+                return System.Threading.Monitor.IsEntered(this.lockObject);
+            });
         }
 
         public Result<bool> TryAcquire()
         {
-            Pre.Condition.AssertFalse(this.IsOwnedByCurrentThread(), $"this.{nameof(IsOwnedByCurrentThread)}()");
+            Pre.Condition.AssertFalse(this.IsOwnedByCurrentThread().Await(), $"this.{nameof(IsOwnedByCurrentThread)}().Await()");
 
             return Result.Create(() =>
             {
@@ -44,7 +69,7 @@ namespace Everyone
 
         public Result Acquire()
         {
-            Pre.Condition.AssertFalse(this.IsOwnedByCurrentThread(), $"this.{nameof(IsOwnedByCurrentThread)}()");
+            Pre.Condition.AssertFalse(this.IsOwnedByCurrentThread().Await(), $"this.{nameof(IsOwnedByCurrentThread)}().Await()");
 
             return Result.Create(() =>
             {
@@ -55,7 +80,7 @@ namespace Everyone
         public Result Acquire(DateTime timeout)
         {
             Pre.Condition.AssertNotNull(timeout, nameof(timeout));
-            Pre.Condition.AssertFalse(this.IsOwnedByCurrentThread(), $"this.{nameof(IsOwnedByCurrentThread)}()");
+            Pre.Condition.AssertFalse(this.IsOwnedByCurrentThread().Await(), $"this.{nameof(IsOwnedByCurrentThread)}().Await()");
 
             return Result.Create(() =>
             {
@@ -84,7 +109,7 @@ namespace Everyone
         public Result Acquire(TimeSpan timeout)
         {
             Pre.Condition.AssertNotNull(timeout, nameof(timeout));
-            Pre.Condition.AssertFalse(this.IsOwnedByCurrentThread(), $"this.{nameof(IsOwnedByCurrentThread)}()");
+            Pre.Condition.AssertFalse(this.IsOwnedByCurrentThread().Await(), $"this.{nameof(IsOwnedByCurrentThread)}().Await()");
 
             return Result.Create(() =>
             {
@@ -109,7 +134,7 @@ namespace Everyone
 
         public Result Release()
         {
-            Pre.Condition.AssertTrue(this.IsOwnedByCurrentThread(), $"this.{nameof(IsOwnedByCurrentThread)}()");
+            Pre.Condition.AssertTrue(this.IsOwnedByCurrentThread().Await(), $"this.{nameof(IsOwnedByCurrentThread)}().Await()");
 
             return Result.Create(() =>
             {

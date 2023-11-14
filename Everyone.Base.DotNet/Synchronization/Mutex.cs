@@ -7,10 +7,15 @@ namespace Everyone
     /// </summary>
     public interface Mutex
     {
-        public static Mutex Create()
+        public static Mutex Create(Clock clock)
         {
-            return MonitorMutex.Create();
+            return MonitorMutex.Create(clock);
         }
+
+        /// <summary>
+        /// Get whether this <see cref="Mutex"/> is owned by the current thread.
+        /// </summary>
+        public Result<bool> IsOwnedByCurrentThread();
 
         /// <summary>
         /// Try to acquire access to the critical section. Immediately return whether access was
@@ -24,10 +29,35 @@ namespace Everyone
         public Result Acquire();
 
         /// <summary>
+        /// Acquire access to the critical section.
+        /// </summary>
+        /// <param name="timeout">The <see cref="DateTime"/> at which to timeout.</param>
+        public Result Acquire(DateTime timeout);
+
+        /// <summary>
+        /// Acquire access to the critical section.
+        /// </summary>
+        /// <param name="timeout">The amount of time to wait before timing out.</param>
+        public Result Acquire(TimeSpan timeout);
+
+        /// <summary>
         /// Release the acquired access to the critical section.
         /// </summary>
-        /// <returns></returns>
         public Result Release();
+
+        /// <summary>
+        /// Create a <see cref="MutableMutexCondition"/> that can be used to wait for a condition within a
+        /// critical section.
+        /// </summary>
+        public MutableMutexCondition CreateCondition();
+
+        /// <summary>
+        /// Create a <see cref="MutableMutexCondition"/> that can be used to wait for a condition within a
+        /// critical section.
+        /// </summary>
+        /// <param name="condition">The condition that must be true before the condition will
+        /// finish watching.</param>
+        public MutableMutexCondition CreateCondition(Func<bool> condition);
     }
 
     /// <summary>

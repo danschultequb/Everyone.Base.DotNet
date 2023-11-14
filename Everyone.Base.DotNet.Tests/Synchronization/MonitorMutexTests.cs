@@ -6,13 +6,7 @@
         {
             runner.TestType<MonitorMutex>(() =>
             {
-                ClockMutexTests.Test(runner, MonitorMutex.Create);
-
-                runner.TestMethod("Create()", (Test test) =>
-                {
-                    MonitorMutex mutex = MonitorMutex.Create();
-                    test.AssertNotNull(mutex);
-                });
+                MutexTests.Test(runner, MonitorMutex.Create);
 
                 runner.TestMethod("Create(Clock)", () =>
                 {

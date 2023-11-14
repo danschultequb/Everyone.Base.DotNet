@@ -1,4 +1,5 @@
-﻿using Everyone.Threading;
+﻿using System;
+using Everyone.Threading;
 
 namespace Everyone
 {
@@ -9,39 +10,77 @@ namespace Everyone
 
         private const int NoOwnerId = -1;
 
+        private readonly Clock clock;
+
         private int owned;
         private int ownerThreadId;
 
-        protected SpinLockMutex()
+        protected SpinLockMutex(Clock clock)
         {
+            Pre.Condition.AssertNotNull(clock, nameof(clock));
+
             this.owned = SpinLockMutex.NotOwned;
             this.ownerThreadId = SpinLockMutex.NoOwnerId;
+            this.clock = clock;
         }
 
-        public static SpinLockMutex Create()
+        public static SpinLockMutex Create(Clock clock)
         {
-            return new SpinLockMutex();
+            return new SpinLockMutex(clock);
         }
 
-        protected bool IsOwned()
+        MutableMutexCondition Mutex.CreateCondition()
         {
-            return this.owned != SpinLockMutex.NotOwned;
+            return this.CreateCondition();
         }
 
-        protected bool IsOwnedByCurrentThread()
+        MutableMutexCondition Mutex.CreateCondition(Func<bool> condition)
         {
-            return this.IsOwnedByThread(CurrentThread.GetId());
+            return this.CreateCondition(condition);
         }
 
-        protected bool IsOwnedByThread(int threadId)
+        public SpinLockMutexCondition CreateCondition()
         {
-            return this.IsOwned() && this.ownerThreadId == threadId;
+            return SpinLockMutexCondition.Create(this, this.clock);
+        }
+
+        public SpinLockMutexCondition CreateCondition(Func<bool> condition)
+        {
+            return SpinLockMutexCondition.Create(this, this.clock, condition);
+        }
+
+        public Result<bool> IsOwned()
+        {
+            return Result.Create(() =>
+            {
+                return this.owned != SpinLockMutex.NotOwned;
+            });
+        }
+
+        public Result<bool> IsOwnedByCurrentThread()
+        {
+            return Result.Create(() =>
+            {
+                return this.IsOwnedByThread(CurrentThread.GetId()).Await();
+            });
+        }
+
+        public Result<bool> IsOwnedByThread(int threadId)
+        {
+            return Result.Create(() =>
+            {
+                return this.IsOwned().Await() && this.ownerThreadId == threadId;
+            });
         }
 
         public Result<bool> TryAcquire()
         {
+            Pre.Condition.AssertFalse(this.IsOwnedByCurrentThread().Await(), $"this.{nameof(IsOwnedByCurrentThread)}().Await()");
+
             return Result.Create(() =>
             {
+                Pre.Condition.AssertFalse(this.IsOwnedByCurrentThread().Await(), $"this.{nameof(IsOwnedByCurrentThread)}().Await()");
+
                 bool result = Atomic.CompareAndSet(ref this.owned, expectedValue: SpinLockMutex.NotOwned, newValue: SpinLockMutex.Owned);
                 if (result)
                 {
@@ -53,14 +92,16 @@ namespace Everyone
 
         public Result Acquire()
         {
-            Pre.Condition.AssertFalse(this.IsOwnedByCurrentThread(), $"this.{nameof(IsOwnedByCurrentThread)}()");
+            Pre.Condition.AssertFalse(this.IsOwnedByCurrentThread().Await(), $"this.{nameof(IsOwnedByCurrentThread)}().Await()");
 
             return Result.Create(() =>
             {
+                Pre.Condition.AssertFalse(this.IsOwnedByCurrentThread().Await(), $"this.{nameof(IsOwnedByCurrentThread)}().Await()");
+
                 int currentThreadId = CurrentThread.GetId();
-                while (!this.IsOwnedByThread(currentThreadId))
+                while (!this.IsOwnedByThread(currentThreadId).Await())
                 {
-                    while (this.IsOwned())
+                    while (this.IsOwned().Await())
                     {
                         CurrentThread.Yield();
                     }
@@ -70,12 +111,60 @@ namespace Everyone
             });
         }
 
-        public Result Release()
+        private void ThrowIfTimedOut(DateTime timeout)
         {
-            Pre.Condition.AssertTrue(this.IsOwnedByCurrentThread(), $"this.{nameof(IsOwnedByCurrentThread)}()");
+            if (timeout <= this.clock.GetCurrentTime())
+            {
+                throw new TimeoutException();
+            }
+        }
+
+        public Result Acquire(DateTime timeout)
+        {
+            Pre.Condition.AssertFalse(this.IsOwnedByCurrentThread().Await(), $"this.{nameof(IsOwnedByCurrentThread)}().Await()");
 
             return Result.Create(() =>
             {
+                Pre.Condition.AssertFalse(this.IsOwnedByCurrentThread().Await(), $"this.{nameof(IsOwnedByCurrentThread)}().Await()");
+
+                int currentThreadId = CurrentThread.GetId();
+                while (!this.IsOwnedByThread(currentThreadId).Await())
+                {
+                    this.ThrowIfTimedOut(timeout);
+
+                    while (this.IsOwned().Await())
+                    {
+                        CurrentThread.Yield();
+
+                        this.ThrowIfTimedOut(timeout);
+                    }
+
+                    this.TryAcquire().Await();
+                }
+            });
+        }
+
+        public Result Acquire(TimeSpan timeout)
+        {
+            Pre.Condition.AssertNotNull(timeout, nameof(timeout));
+            Pre.Condition.AssertFalse(this.IsOwnedByCurrentThread().Await(), $"this.{nameof(IsOwnedByCurrentThread)}().Await()");
+
+            return Result.Create(() =>
+            {
+                Pre.Condition.AssertFalse(this.IsOwnedByCurrentThread().Await(), $"this.{nameof(IsOwnedByCurrentThread)}().Await()");
+
+                this.Acquire(this.clock.GetCurrentTime().Add(timeout)).Await();
+            });
+        }
+
+        public Result Release()
+        {
+            Pre.Condition.AssertTrue(this.IsOwnedByCurrentThread().Await(), $"this.{nameof(IsOwnedByCurrentThread)}().Await()");
+
+            return Result.Create(() =>
+            {
+                Pre.Condition.AssertTrue(this.IsOwnedByCurrentThread().Await(), $"this.{nameof(IsOwnedByCurrentThread)}().Await()");
+
                 this.ownerThreadId = SpinLockMutex.NoOwnerId;
                 this.owned = SpinLockMutex.NotOwned;
             });
