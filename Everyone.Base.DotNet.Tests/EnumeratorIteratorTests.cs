@@ -124,7 +124,7 @@ namespace Everyone
 
                 runner.Test("foreach", (Test test) =>
                 {
-                    List<int> values = new List<int>();
+                    List<int> values = List.Create<int>();
                     EnumeratorIterator<int> iterator = CreateIterator(1, 2, 3);
                     foreach (int value in iterator)
                     {

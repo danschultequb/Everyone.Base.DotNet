@@ -1,16 +1,23 @@
 ﻿namespace Everyone
 {
-    public static class StringBuilderCharacterWriteStreamTests
+    public static class StringBuilderCharacterStreamTests
     {
+        private static StringBuilderCharacterStream Create()
+        {
+            SystemClock clock = Clock.Create();
+            Mutex mutex = Mutex.Create(clock);
+            return StringBuilderCharacterStream.Create(mutex);
+        }
+
         public static void Test(TestRunner runner)
         {
-            runner.TestType<StringBuilderCharacterWriteStream>(() =>
+            runner.TestType<StringBuilderCharacterStream>(() =>
             {
-                CharacterWriteStreamTests.Test(runner, StringBuilderCharacterWriteStream.Create);
+                CharacterWriteStreamTests.Test(runner, StringBuilderCharacterStreamTests.Create);
 
                 runner.TestMethod("Create()", (Test test) =>
                 {
-                    using (StringBuilderCharacterWriteStream stream = StringBuilderCharacterWriteStream.Create())
+                    using (StringBuilderCharacterStream stream = StringBuilderCharacterStreamTests.Create())
                     {
                         test.AssertNotNull(stream);
                         test.AssertNotDisposed(stream);
@@ -22,7 +29,7 @@
                 {
                     runner.Test("with not disposed stream", (Test test) =>
                     {
-                        using (StringBuilderCharacterWriteStream stream = StringBuilderCharacterWriteStream.Create())
+                        using (StringBuilderCharacterStream stream = StringBuilderCharacterStreamTests.Create())
                         {
                             Result<int> writeCharacterResult = stream.WriteCharacter('a');
                             test.AssertNotNull(writeCharacterResult);
@@ -41,7 +48,7 @@
 
                     runner.Test("with stream disposed before write", (Test test) =>
                     {
-                        using (StringBuilderCharacterWriteStream stream = StringBuilderCharacterWriteStream.Create())
+                        using (StringBuilderCharacterStream stream = StringBuilderCharacterStreamTests.Create())
                         {
                             test.AssertTrue(stream.Dispose().Await());
 
@@ -61,7 +68,7 @@
                     {
                         runner.Test($"with {runner.ToString(characters)}", (Test test) =>
                         {
-                            using (StringBuilderCharacterWriteStream stream = StringBuilderCharacterWriteStream.Create())
+                            using (StringBuilderCharacterStream stream = StringBuilderCharacterStreamTests.Create())
                             {
                                 Result<int> writeCharactersResult = stream.WriteCharacters(characters);
                                 test.AssertNotNull(writeCharactersResult);
@@ -87,7 +94,7 @@
                     {
                         runner.Test($"with {Language.AndList(new object[] { characters, startIndex, length }.Map(runner.ToString))}", (Test test) =>
                         {
-                            using (StringBuilderCharacterWriteStream stream = StringBuilderCharacterWriteStream.Create())
+                            using (StringBuilderCharacterStream stream = StringBuilderCharacterStreamTests.Create())
                             {
                                 Result<int> writeCharactersResult = stream.WriteCharacters(characters, startIndex, length);
                                 test.AssertNotNull(writeCharactersResult);
@@ -118,9 +125,9 @@
 
                 runner.TestMethod("Clear()", (Test test) =>
                 {
-                    using (StringBuilderCharacterWriteStream stream = StringBuilderCharacterWriteStream.Create())
+                    using (StringBuilderCharacterStream stream = StringBuilderCharacterStreamTests.Create())
                     {
-                        StringBuilderCharacterWriteStream clearResult = stream.Clear();
+                        StringBuilderCharacterStream clearResult = stream.Clear();
                         test.AssertSame(stream, clearResult);
                         test.AssertEqual("", stream.ToString());
 

@@ -20,7 +20,7 @@ namespace Everyone
                     MutableMutexCondition mutableCondition = mutex.CreateCondition();
                     test.AssertNotNull(mutableCondition);
 
-                    List<string> events = new List<string>();
+                    List<string> events = List.Create<string>();
                     events.Add("1. creating other thread");
 
                     Thread otherThread = new Thread(() =>

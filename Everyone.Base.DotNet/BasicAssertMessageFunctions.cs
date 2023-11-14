@@ -41,7 +41,7 @@ namespace Everyone
 
         private string Expected(string expected, AssertParameters? parameters)
         {
-            List<string> resultList = new List<string>();
+            List<string> resultList = List.Create<string>();
 
             AddMessage(resultList, parameters?.Message);
             AddExpression(resultList, parameters?.Expression);
@@ -53,7 +53,7 @@ namespace Everyone
 
         private string Expected(string expected, string actual, AssertParameters? parameters)
         {
-            List<string> resultList = new List<string>();
+            List<string> resultList = List.Create<string>();
 
             AddMessage(resultList, parameters?.Message);
             AddExpression(resultList, parameters?.Expression);

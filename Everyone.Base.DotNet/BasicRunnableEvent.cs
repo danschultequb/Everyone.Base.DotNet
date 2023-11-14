@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Everyone
 {
     public class BasicRunnableEvent : RunnableEvent
     {
-        private readonly List<Action> actions = new List<Action>();
+        private readonly List<Action> actions = List.Create<Action>();
 
         public Disposable Subscribe(Action action)
         {
@@ -32,7 +31,7 @@ namespace Everyone
 
     public class BasicRunnableEvent<T1> : RunnableEvent<T1>
     {
-        private readonly List<Action<T1>> actions = new List<Action<T1>>();
+        private readonly List<Action<T1>> actions = List.Create<Action<T1>>();
 
         public Disposable Subscribe(Action<T1> action)
         {
@@ -59,7 +58,7 @@ namespace Everyone
 
     public class BasicRunnableEvent<T1,T2> : RunnableEvent<T1,T2>
     {
-        private readonly List<Action<T1,T2>> actions = new List<Action<T1,T2>>();
+        private readonly List<Action<T1,T2>> actions = List.Create<Action<T1,T2>>();
 
         public Disposable Subscribe(Action<T1,T2> action)
         {

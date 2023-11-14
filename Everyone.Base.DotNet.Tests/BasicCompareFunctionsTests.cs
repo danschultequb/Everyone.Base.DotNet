@@ -351,7 +351,7 @@ namespace Everyone
                     EqualTest((decimal)12, (double)12, true);
                     EqualTest((decimal)13, (decimal)13, true);
 
-                    EqualTest(new[] { 1, 2, 3 }, new List<int> { 1, 2, 3 }, true);
+                    EqualTest(new[] { 1, 2, 3 }, List.Create(1, 2, 3), true);
                     EqualTest(new Exception("abc"), new Exception("abc"), true);
                     EqualTest(new Exception("abc"), new Exception("def"), false);
                     EqualTest(new Exception("abc"), new IOException("abc"), false);

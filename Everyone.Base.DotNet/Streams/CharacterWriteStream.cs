@@ -23,14 +23,6 @@ namespace Everyone
         /// <param name="length">The number of <see cref="char"/>s to write.</param>
         /// <returns>The number of <see cref="char"/>s that were written.</returns>
         public Result<int> WriteCharacters(char[] characters, int startIndex, int length);
-
-        /// <summary>
-        /// Create a new <see cref="CharacterWriteStream"/>.
-        /// </summary>
-        public new static StringBuilderCharacterWriteStream Create()
-        {
-            return StringBuilderCharacterWriteStream.Create();
-        }
     }
 
     public abstract class CharacterWriteStreamDecorator : CharacterWriteStream

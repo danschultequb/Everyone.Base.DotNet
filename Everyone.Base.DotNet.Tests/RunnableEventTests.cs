@@ -51,7 +51,7 @@ namespace Everyone
                     {
                         RunnableEvent e = creator.Invoke();
 
-                        List<string> values = new List<string>();
+                        List<string> values = List.Create<string>();
                         using (e.Subscribe(() => values.Add("a")))
                         {
                             e.Invoke();
@@ -66,7 +66,7 @@ namespace Everyone
                     {
                         RunnableEvent e = creator.Invoke();
 
-                        List<string> values = new List<string>();
+                        List<string> values = List.Create<string>();
                         using (e.Subscribe(() => values.Add("a")))
                         {
                             e.Subscribe(() => values.Add("1"));
@@ -100,7 +100,7 @@ namespace Everyone
                     {
                         RunnableEvent<int> e = creator.Invoke();
 
-                        List<string> values = new List<string>();
+                        List<string> values = List.Create<string>();
                         using (e.Subscribe((int value) => values.Add(Characters.Escape((char)('a' + value)))))
                         {
                             e.Invoke(0);
@@ -115,7 +115,7 @@ namespace Everyone
                     {
                         RunnableEvent<int> e = creator.Invoke();
 
-                        List<string> values = new List<string>();
+                        List<string> values = List.Create<string>();
                         using (e.Subscribe((int value) => values.Add(Characters.Escape((char)('a' + value)))))
                         {
                             e.Subscribe((int value) => values.Add(Characters.Escape((char)('1' + value))));
@@ -149,7 +149,7 @@ namespace Everyone
                     {
                         RunnableEvent<int,bool> e = creator.Invoke();
 
-                        List<string> values = new List<string>();
+                        List<string> values = List.Create<string>();
                         using (e.Subscribe((int value, bool value2) => values.Add(Characters.Escape((char)('a' + value)))))
                         {
                             e.Invoke(0, true);
@@ -164,7 +164,7 @@ namespace Everyone
                     {
                         RunnableEvent<int,bool> e = creator.Invoke();
 
-                        List<string> values = new List<string>();
+                        List<string> values = List.Create<string>();
                         using (e.Subscribe((int value, bool value2) => values.Add(Characters.Escape((char)('a' + value)))))
                         {
                             e.Subscribe((int value, bool value2) => values.Add(Characters.Escape((char)('1' + value))));

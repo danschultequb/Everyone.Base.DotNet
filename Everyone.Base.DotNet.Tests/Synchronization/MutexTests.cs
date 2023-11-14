@@ -75,7 +75,7 @@ namespace Everyone
 
                             runner.Test("when acquired by a different thread", (Test test) =>
                             {
-                                List<string> events = new List<string>();
+                                List<string> events = List.Create<string>();
 
                                 Mutex mutex = creator.Invoke(clock);
                                 events.Add("1. acquiring mutex");

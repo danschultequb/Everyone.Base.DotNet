@@ -179,11 +179,11 @@ namespace Everyone
                     InstanceOfTest("hello", typeof(string), true);
                     InstanceOfTest("hello", typeof(IEnumerable), true);
                     InstanceOfTest("hello", typeof(IEnumerable<char>), true);
-                    InstanceOfTest(new List<int>(), typeof(List<int>), true);
-                    InstanceOfTest(new List<int>(), typeof(IReadOnlyList<int>), true);
-                    InstanceOfTest(new List<int>(), typeof(IEnumerable), true);
-                    InstanceOfTest(new List<int>(), typeof(IEnumerable<int>), true);
-                    InstanceOfTest(new List<int>(), typeof(string), false);
+                    InstanceOfTest(List.Create<int>(), typeof(List<int>), true);
+                    InstanceOfTest(List.Create<int>(), typeof(IReadOnlyList<int>), true);
+                    InstanceOfTest(List.Create<int>(), typeof(IEnumerable), true);
+                    InstanceOfTest(List.Create<int>(), typeof(IEnumerable<int>), true);
+                    InstanceOfTest(List.Create<int>(), typeof(string), false);
                 });
 
                 runner.TestMethod("InstanceOf(this Type,Type)", () =>

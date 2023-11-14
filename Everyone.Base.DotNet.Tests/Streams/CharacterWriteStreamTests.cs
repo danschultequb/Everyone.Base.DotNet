@@ -4,21 +4,6 @@ namespace Everyone
 {
     public static class CharacterWriteStreamTests
     {
-        public static void Test(TestRunner runner)
-        {
-            runner.TestType<CharacterWriteStream>(() =>
-            {
-                runner.TestMethod("Create()", (Test test) =>
-                {
-                    using (StringBuilderCharacterWriteStream stream = CharacterWriteStream.Create())
-                    {
-                        test.AssertNotNull(stream);
-                        test.AssertEqual("", stream.ToString());
-                    }
-                });
-            });
-        }
-
         public static void Test(TestRunner runner, Func<CharacterWriteStream> creator)
         {
             runner.TestType<CharacterWriteStream>(() =>
